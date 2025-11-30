@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MediCore EMR - Dr. Prakash (Prototype)</title>
+    <title>MediCore EMR - Dr. Prakash</title>
     <style>
-        /* iPad-Optimized Styles */
+        /* Professional Medical UI Design */
         :root {
-            --primary-color: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --danger-color: #ef4444;
-            --warning-color: #f59e0b;
-            --bg-color: #f8fafc;
-            --border-color: #e2e8f0;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --primary-color: #0066cc;
+            --primary-dark: #004c99;
+            --primary-light: #e6f2ff;
+            --secondary-color: #2c3e50;
+            --success-color: #00b894;
+            --danger-color: #d63031;
+            --warning-color: #fdcb6e;
+            --info-color: #74b9ff;
+            --bg-color: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --border-color: #dfe6e9;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-light: #b2bec3;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
             --touch-target: 56px;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
             --spacing-md: 16px;
             --spacing-lg: 24px;
-            --border-radius: 8px;
+            --spacing-xl: 32px;
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
         }
 
         * {
@@ -31,95 +42,148 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: var(--text-primary);
             font-size: 16px;
             overflow: hidden;
+            line-height: 1.6;
         }
 
         .app-container {
             display: grid;
-            grid-template-columns: 360px 1fr;
+            grid-template-columns: 320px 1fr;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* Sidebar */
+        /* Professional Sidebar */
         .sidebar {
-            background: white;
-            border-right: 1px solid var(--border-color);
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            box-shadow: var(--shadow-lg);
         }
 
         .sidebar-header {
-            padding: var(--spacing-lg);
-            background: var(--primary-color);
-            color: white;
+            padding: var(--spacing-xl) var(--spacing-lg);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-md);
         }
 
         .sidebar-header h1 {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
+            color: white;
             margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
         .sidebar-header p {
             font-size: 14px;
-            opacity: 0.9;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
         }
 
         .sidebar-content {
             flex: 1;
             overflow-y: auto;
-            padding: var(--spacing-md);
+            padding: var(--spacing-lg);
+        }
+
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
         }
 
         /* Main Content */
         .main-content {
             background: var(--bg-color);
             overflow-y: auto;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
         }
 
-        /* Buttons */
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        /* Professional Buttons */
         .btn {
             min-height: var(--touch-target);
-            padding: 0 32px;
-            font-size: 18px;
+            padding: 0 var(--spacing-xl);
+            font-size: 16px;
             font-weight: 600;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-sm);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: var(--spacing-sm);
+            box-shadow: var(--shadow-sm);
+            letter-spacing: 0.3px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .btn:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
         .btn-primary {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
         .btn-success {
-            background: var(--success-color);
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
             color: white;
         }
 
         .btn-danger {
-            background: var(--danger-color);
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
             color: white;
         }
 
@@ -127,6 +191,11 @@
             background: white;
             color: var(--primary-color);
             border: 2px solid var(--primary-color);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
         }
 
         .btn-block {
@@ -135,51 +204,126 @@
 
         .btn-lg {
             min-height: 64px;
-            font-size: 20px;
+            font-size: 18px;
+            border-radius: var(--border-radius);
         }
 
-        /* Input Fields */
+        /* Professional Input Fields */
         .input-field {
             min-height: 52px;
-            padding: var(--spacing-md);
-            font-size: 18px;
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: 16px;
             border: 2px solid var(--border-color);
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-sm);
             width: 100%;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-primary);
         }
 
         .input-field:focus {
             outline: none;
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-light);
         }
 
         .input-group {
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
         }
 
         .input-label {
             display: block;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: var(--spacing-sm);
             color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* Cards */
+        /* Professional Cards */
         .card {
             background: white;
             border-radius: var(--border-radius);
-            padding: var(--spacing-lg);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
         }
 
         .card-header {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
             padding-bottom: var(--spacing-md);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stats-card h3 {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .stats-card p {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stats-card.primary {
+            border-left-color: var(--primary-color);
+        }
+
+        .stats-card.primary p {
+            color: var(--primary-color);
+        }
+
+        .stats-card.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .stats-card.warning p {
+            color: #e17055;
+        }
+
+        .stats-card.success {
+            border-left-color: var(--success-color);
+        }
+
+        .stats-card.success p {
+            color: var(--success-color);
         }
 
         /* Patient List */
@@ -188,27 +332,31 @@
         }
 
         .patient-list-item {
-            padding: var(--spacing-md);
+            padding: var(--spacing-lg);
             border-bottom: 1px solid var(--border-color);
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: var(--spacing-xs);
         }
 
         .patient-list-item:hover {
-            background: var(--bg-color);
+            background: var(--primary-light);
+            transform: translateX(4px);
         }
 
         .patient-list-item:active {
-            background: #e2e8f0;
+            background: #cce5ff;
         }
 
         .patient-info h3 {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             margin-bottom: 4px;
+            color: var(--text-primary);
         }
 
         .patient-info p {
@@ -220,75 +368,97 @@
         .quick-select-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: var(--spacing-sm);
             margin: var(--spacing-md) 0;
         }
 
         .quick-select-btn {
-            min-height: 64px;
+            min-height: 72px;
             padding: var(--spacing-md);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             border: 2px solid var(--border-color);
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-sm);
             background: white;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .quick-select-btn:hover {
             border-color: var(--primary-color);
-            background: #f0f9ff;
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
 
         .quick-select-btn.active {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-color: var(--primary-color);
+            border-color: transparent;
+            box-shadow: var(--shadow-md);
         }
 
         /* Form Grid */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
         }
 
         .form-grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
         }
 
         /* Search Box */
         .search-box {
             position: relative;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
         }
 
         .search-box input {
-            padding-left: 48px;
+            padding-left: 52px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-box input:focus {
+            background: white;
+            color: var(--text-primary);
+            border-color: white;
         }
 
         .search-icon {
             position: absolute;
-            left: var(--spacing-md);
+            left: var(--spacing-lg);
             top: 50%;
             transform: translateY(-50%);
             font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         /* Badge */
         .badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .badge-primary {
-            background: #dbeafe;
+            background: var(--primary-light);
             color: var(--primary-color);
         }
 
@@ -299,26 +469,30 @@
 
         .badge-warning {
             background: #fef3c7;
-            color: var(--warning-color);
+            color: #e17055;
         }
 
-        /* Stats Card */
-        .stats-card {
-            background: white;
-            border-radius: var(--border-radius);
+        /* Medicine List */
+        .medicine-item {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: var(--border-radius-sm);
             padding: var(--spacing-lg);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: var(--spacing-md);
+            border-left: 4px solid var(--primary-color);
+            box-shadow: var(--shadow-sm);
         }
 
-        .stats-card h3 {
+        .medicine-item h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+
+        .medicine-item p {
             font-size: 14px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .stats-card p {
-            font-size: 32px;
-            font-weight: 700;
+            margin: 4px 0;
         }
 
         /* Utility Classes */
@@ -327,19 +501,19 @@
         }
 
         .mb-3 {
-            margin-bottom: var(--spacing-md);
-        }
-
-        .mb-4 {
             margin-bottom: var(--spacing-lg);
         }
 
+        .mb-4 {
+            margin-bottom: var(--spacing-xl);
+        }
+
         .mt-3 {
-            margin-top: var(--spacing-md);
+            margin-top: var(--spacing-lg);
         }
 
         .mt-4 {
-            margin-top: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
         }
 
         .flex {
@@ -353,25 +527,77 @@
         }
 
         .gap-3 {
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
         }
 
         .text-center {
             text-align: center;
         }
 
-        /* Medicine List */
-        .medicine-item {
-            background: #f0f9ff;
-            border-radius: var(--border-radius);
-            padding: var(--spacing-md);
-            margin-bottom: 12px;
+        /* Current Patient Card */
+        #currentPatientCard {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
         }
 
-        .medicine-item h4 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
+        #currentPatientCard h3 {
+            color: white;
+        }
+
+        #currentPatientInfo p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Billing Total Card */
+        .billing-total {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            border: none;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .billing-total h3,
+        .billing-total p {
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsive */
+        @media (min-width: 1024px) and (max-width: 1366px) {
+            .app-container {
+                grid-template-columns: 340px 1fr;
+            }
+        }
+
+        @media (min-width: 834px) and (max-width: 1194px) {
+            .app-container {
+                grid-template-columns: 300px 1fr;
+            }
+            
+            .btn {
+                font-size: 15px;
+            }
+            
+            .input-field {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -380,16 +606,21 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h1>MediCore EMR</h1>
-                <p>Dr. Prakash's Clinic</p>
+                <div class="logo-container">
+                    <div class="logo-icon">⚕️</div>
+                    <div>
+                        <h1>MediCore</h1>
+                        <p>Dr. Prakash's Clinic</p>
+                    </div>
+                </div>
             </div>
 
             <div class="sidebar-content">
                 <button class="btn btn-primary btn-block mb-3" onclick="showView('registration')">
-                    + New Patient
+                    ➕ New Patient
                 </button>
 
-                <button class="btn btn-outline btn-block mb-3" onclick="showView('dashboard')">
+                <button class="btn btn-outline btn-block mb-3" onclick="showView('dashboard')" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
                     🏠 Dashboard
                 </button>
 
@@ -406,10 +637,10 @@
                 <div id="patientList"></div>
 
                 <div id="currentPatientCard" class="card hidden">
-                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Current Patient</h3>
+                    <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Current Patient</h3>
                     <div id="currentPatientInfo"></div>
-                    <button class="btn btn-outline btn-block mt-3" onclick="showView('history')">
-                        View History
+                    <button class="btn btn-outline btn-block mt-3" onclick="showView('history')" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
+                        📋 View History
                     </button>
                 </div>
             </div>
@@ -419,25 +650,27 @@
         <div class="main-content">
             <!-- Dashboard View -->
             <div id="dashboardView">
-                <h2 class="card-header">Dashboard</h2>
+                <h2 class="card-header" style="background: white; padding: var(--spacing-xl); border-radius: var(--border-radius); box-shadow: var(--shadow-md); border: none;">
+                    📊 Dashboard Overview
+                </h2>
                 
                 <div class="form-grid-3 mb-4">
-                    <div class="stats-card">
+                    <div class="stats-card primary">
                         <h3>Today's Patients</h3>
-                        <p style="color: var(--primary-color);" id="todayPatientsCount">0</p>
+                        <p id="todayPatientsCount">0</p>
                     </div>
-                    <div class="stats-card">
+                    <div class="stats-card warning">
                         <h3>Follow-ups Today</h3>
-                        <p style="color: var(--warning-color);" id="followupsCount">0</p>
+                        <p id="followupsCount">0</p>
                     </div>
-                    <div class="stats-card">
+                    <div class="stats-card success">
                         <h3>Today's Collection</h3>
-                        <p style="color: var(--success-color);" id="collectionAmount">₹0</p>
+                        <p id="collectionAmount">₹0</p>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3 class="card-header">Recent Patients</h3>
+                    <h3 class="card-header">👥 Recent Patients</h3>
                     <ul class="patient-list" id="recentPatientsList"></ul>
                 </div>
             </div>
@@ -445,13 +678,13 @@
             <!-- Patient Registration View -->
             <div id="registrationView" class="hidden">
                 <div class="card">
-                    <h2 class="card-header">New Patient Registration</h2>
+                    <h2 class="card-header">➕ New Patient Registration</h2>
                     
                     <form onsubmit="registerPatient(event)">
                         <div class="form-grid">
                             <div class="input-group">
-                                <label class="input-label">Name *</label>
-                                <input type="text" class="input-field" id="patientName" required placeholder="Enter patient name">
+                                <label class="input-label">Patient Name *</label>
+                                <input type="text" class="input-field" id="patientName" required placeholder="Enter full name">
                             </div>
                             <div class="input-group">
                                 <label class="input-label">Age *</label>
@@ -469,24 +702,24 @@
                                 </select>
                             </div>
                             <div class="input-group">
-                                <label class="input-label">Phone *</label>
-                                <input type="tel" class="input-field" id="patientPhone" required placeholder="Enter phone number" pattern="[0-9]{10}">
+                                <label class="input-label">Phone Number *</label>
+                                <input type="tel" class="input-field" id="patientPhone" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
                             </div>
                         </div>
 
                         <div class="input-group">
-                            <label class="input-label">Email</label>
-                            <input type="email" class="input-field" id="patientEmail" placeholder="Enter email (optional)">
+                            <label class="input-label">Email Address</label>
+                            <input type="email" class="input-field" id="patientEmail" placeholder="patient@example.com (optional)">
                         </div>
 
                         <div class="input-group">
                             <label class="input-label">Address</label>
-                            <textarea class="input-field" id="patientAddress" placeholder="Enter address (optional)" rows="3"></textarea>
+                            <textarea class="input-field" id="patientAddress" placeholder="Enter complete address (optional)" rows="3"></textarea>
                         </div>
 
                         <div class="flex gap-3 mt-4">
-                            <button type="submit" class="btn btn-primary btn-block">Register Patient</button>
-                            <button type="button" class="btn btn-outline" onclick="showView('dashboard')">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">✅ Register Patient</button>
+                            <button type="button" class="btn btn-outline btn-lg" onclick="showView('dashboard')">❌ Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -497,22 +730,22 @@
                 <div class="card">
                     <div class="flex-between mb-3">
                         <div id="casesheetPatientInfo"></div>
-                        <span class="badge badge-success" style="font-size: 16px; padding: 8px 16px;">New Visit</span>
+                        <span class="badge badge-success" style="font-size: 16px; padding: 10px 20px;">🆕 New Visit</span>
                     </div>
 
                     <form onsubmit="saveCaseSheet(event)">
                         <!-- Chief Complaints -->
                         <div class="input-group">
-                            <label class="input-label">Chief Complaints *</label>
+                            <label class="input-label">🩺 Chief Complaints *</label>
                             <div class="quick-select-grid" id="complaintsGrid"></div>
                         </div>
 
                         <!-- Vitals -->
                         <div class="input-group">
-                            <label class="input-label">Vitals</label>
+                            <label class="input-label">💓 Vital Signs</label>
                             <div class="form-grid-3">
                                 <input type="text" class="input-field" id="vitalBP" placeholder="BP (e.g., 120/80)">
-                                <input type="text" class="input-field" id="vitalTemp" placeholder="Temperature (°F)">
+                                <input type="text" class="input-field" id="vitalTemp" placeholder="Temp (°F)">
                                 <input type="text" class="input-field" id="vitalPulse" placeholder="Pulse (bpm)">
                             </div>
                             <div class="form-grid mt-3">
@@ -523,36 +756,36 @@
 
                         <!-- History -->
                         <div class="input-group">
-                            <label class="input-label">History</label>
-                            <textarea class="input-field" id="history" rows="3" placeholder="History of present illness..."></textarea>
+                            <label class="input-label">📝 History of Present Illness</label>
+                            <textarea class="input-field" id="history" rows="3" placeholder="Detailed history..."></textarea>
                         </div>
 
                         <!-- Examination -->
                         <div class="input-group">
-                            <label class="input-label">Examination</label>
-                            <textarea class="input-field" id="examination" rows="3" placeholder="Physical examination findings..."></textarea>
+                            <label class="input-label">🔍 Physical Examination</label>
+                            <textarea class="input-field" id="examination" rows="3" placeholder="Examination findings..."></textarea>
                         </div>
 
                         <!-- Diagnosis -->
                         <div class="input-group">
-                            <label class="input-label">Diagnosis *</label>
+                            <label class="input-label">🎯 Diagnosis *</label>
                             <div class="quick-select-grid" id="diagnosisGrid"></div>
                         </div>
 
                         <!-- Notes -->
                         <div class="input-group">
-                            <label class="input-label">Notes</label>
-                            <textarea class="input-field" id="notes" rows="2" placeholder="Additional notes..."></textarea>
+                            <label class="input-label">📌 Additional Notes</label>
+                            <textarea class="input-field" id="notes" rows="2" placeholder="Any additional notes..."></textarea>
                         </div>
 
                         <!-- Follow-up Date -->
                         <div class="input-group">
-                            <label class="input-label">Follow-up Date</label>
+                            <label class="input-label">📅 Follow-up Date</label>
                             <input type="date" class="input-field" id="followupDate">
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-block btn-lg mt-4">
-                            Save & Continue to Prescription
+                            ➡️ Save & Continue to Prescription
                         </button>
                     </form>
                 </div>
@@ -561,7 +794,7 @@
             <!-- Prescription View -->
             <div id="prescriptionView" class="hidden">
                 <div class="card">
-                    <h2 class="card-header">E-Prescription</h2>
+                    <h2 class="card-header">💊 E-Prescription</h2>
 
                     <div class="input-group">
                         <label class="input-label">Quick Select Medicines</label>
@@ -569,10 +802,10 @@
                     </div>
 
                     <button class="btn btn-outline btn-block mt-3" onclick="toggleCustomMedicine()">
-                        + Add Custom Medicine
+                        ➕ Add Custom Medicine
                     </button>
 
-                    <div id="customMedicineForm" class="card mt-3 hidden" style="background: var(--bg-color);">
+                    <div id="customMedicineForm" class="card mt-3 hidden" style="background: var(--primary-light);">
                         <div class="form-grid">
                             <div class="input-group">
                                 <label class="input-label">Medicine Name</label>
@@ -616,17 +849,17 @@
                                 </select>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-block mt-3" onclick="addCustomMedicine()">Add Medicine</button>
+                        <button class="btn btn-primary btn-block mt-3" onclick="addCustomMedicine()">✅ Add Medicine</button>
                     </div>
 
                     <div id="selectedMedicinesList" class="mt-4"></div>
 
                     <div class="flex gap-3 mt-4 hidden" id="prescriptionActions">
                         <button class="btn btn-success btn-block btn-lg" onclick="generatePrescription()">
-                            Generate Prescription PDF
+                            📄 Generate PDF
                         </button>
                         <button class="btn btn-primary btn-lg" onclick="generatePrescription()">
-                            Save & WhatsApp
+                            📱 Send WhatsApp
                         </button>
                     </div>
                 </div>
@@ -635,7 +868,7 @@
             <!-- Billing View -->
             <div id="billingView" class="hidden">
                 <div class="card">
-                    <h2 class="card-header">Billing & Payment</h2>
+                    <h2 class="card-header">💰 Billing & Payment</h2>
 
                     <form onsubmit="saveBilling(event)">
                         <div class="form-grid">
@@ -649,10 +882,10 @@
                             </div>
                         </div>
 
-                        <div class="card mt-3" style="background: #f0fdf4; border: 2px solid var(--success-color);">
+                        <div class="card mt-3 billing-total">
                             <div class="flex-between">
-                                <h3 style="font-size: 20px; font-weight: 700;">Total Amount</h3>
-                                <p style="font-size: 32px; font-weight: 700; color: var(--success-color);" id="totalAmount">₹500.00</p>
+                                <h3 style="font-size: 22px; font-weight: 700;">Total Amount</h3>
+                                <p style="font-size: 40px; font-weight: 700;" id="totalAmount">₹500.00</p>
                             </div>
                         </div>
 
@@ -660,25 +893,25 @@
                             <div class="input-group">
                                 <label class="input-label">Payment Mode</label>
                                 <select class="input-field" id="paymentMode">
-                                    <option value="Cash">Cash</option>
-                                    <option value="Card">Card</option>
-                                    <option value="UPI">UPI</option>
-                                    <option value="Net Banking">Net Banking</option>
+                                    <option value="Cash">💵 Cash</option>
+                                    <option value="Card">💳 Card</option>
+                                    <option value="UPI">📱 UPI</option>
+                                    <option value="Net Banking">🏦 Net Banking</option>
                                 </select>
                             </div>
                             <div class="input-group">
                                 <label class="input-label">Payment Status</label>
                                 <select class="input-field" id="paymentStatus">
-                                    <option value="Paid">Paid</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Partial">Partial</option>
+                                    <option value="Paid">✅ Paid</option>
+                                    <option value="Pending">⏳ Pending</option>
+                                    <option value="Partial">⚠️ Partial</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="flex gap-3 mt-4">
-                            <button type="submit" class="btn btn-success btn-block btn-lg">Record Payment</button>
-                            <button type="button" class="btn btn-outline btn-lg" onclick="printReceipt()">Print Receipt</button>
+                            <button type="submit" class="btn btn-success btn-block btn-lg">✅ Record Payment</button>
+                            <button type="button" class="btn btn-outline btn-lg" onclick="printReceipt()">🖨️ Print Receipt</button>
                         </div>
                     </form>
                 </div>
@@ -687,7 +920,7 @@
             <!-- Patient History View -->
             <div id="historyView" class="hidden">
                 <div class="card">
-                    <h2 class="card-header">Visit History</h2>
+                    <h2 class="card-header">📋 Visit History</h2>
                     <div id="historyList"></div>
                 </div>
             </div>
@@ -695,7 +928,7 @@
     </div>
 
     <script>
-        // Sample Data Storage (In real app, this would be API calls)
+        // Sample Data Storage
         let patients = [
             { id: 1, code: 'P000001', name: 'Ramesh Kumar', age: 45, gender: 'Male', phone: '9876543210', email: 'ramesh@example.com' },
             { id: 2, code: 'P000002', name: 'Priya Sharma', age: 32, gender: 'Female', phone: '9876543211', email: 'priya@example.com' },
@@ -709,7 +942,6 @@
         let selectedDiagnoses = [];
         let selectedMedicines = [];
 
-        // Master Data
         const complaints = ['Fever', 'Cough', 'Breathless', 'Joint pains', 'Abdominal pain', 'General weakness'];
         const diagnoses = ['Viral fever', 'Diabetes', 'Hypertension', 'CKD'];
         const medicines = [
@@ -720,7 +952,6 @@
             { name: 'Becasule', dosage: '1 cap', frequency: 'OD', duration: '30 days', instructions: 'After food' }
         ];
 
-        // Initialize
         window.onload = function() {
             renderDashboard();
             renderPatientList();
@@ -729,7 +960,6 @@
             renderMedicinesGrid();
         };
 
-        // View Management
         function showView(viewName) {
             const views = ['dashboard', 'registration', 'casesheet', 'prescription', 'billing', 'history'];
             views.forEach(view => {
@@ -738,7 +968,6 @@
             document.getElementById(viewName + 'View').classList.remove('hidden');
         }
 
-        // Dashboard
         function renderDashboard() {
             document.getElementById('todayPatientsCount').textContent = patients.length;
             document.getElementById('followupsCount').textContent = '0';
@@ -756,7 +985,6 @@
             `).join('');
         }
 
-        // Patient List
         function renderPatientList() {
             const list = document.getElementById('patientList');
             list.innerHTML = `
@@ -773,7 +1001,6 @@
             `;
         }
 
-        // Search Patients
         function searchPatients(query) {
             if (query.length < 2) {
                 renderPatientList();
@@ -802,28 +1029,26 @@
             `;
         }
 
-        // Select Patient
         function selectPatient(patientId) {
             currentPatient = patients.find(p => p.id === patientId);
             
             document.getElementById('currentPatientCard').classList.remove('hidden');
             document.getElementById('currentPatientInfo').innerHTML = `
                 <p style="font-size: 18px; font-weight: 700;">${currentPatient.name}</p>
-                <p style="font-size: 14px; color: var(--text-secondary);">${currentPatient.age} years • ${currentPatient.gender}</p>
-                <p style="font-size: 14px; color: var(--text-secondary);">${currentPatient.phone}</p>
+                <p style="font-size: 14px;">${currentPatient.age} years • ${currentPatient.gender}</p>
+                <p style="font-size: 14px;">${currentPatient.phone}</p>
             `;
 
             document.getElementById('casesheetPatientInfo').innerHTML = `
                 <div>
-                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">${currentPatient.name}</h2>
-                    <p style="color: var(--text-secondary);">${currentPatient.age} years • ${currentPatient.gender} • ${currentPatient.code}</p>
+                    <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 4px;">${currentPatient.name}</h2>
+                    <p style="color: var(--text-secondary); font-size: 16px;">${currentPatient.age} years • ${currentPatient.gender} • ${currentPatient.code}</p>
                 </div>
             `;
 
             showView('casesheet');
         }
 
-        // Register Patient
         function registerPatient(event) {
             event.preventDefault();
 
@@ -838,13 +1063,12 @@
             };
 
             patients.push(newPatient);
-            alert('Patient registered successfully!');
+            alert('✅ Patient registered successfully!');
             
             selectPatient(newPatient.id);
             event.target.reset();
         }
 
-        // Complaints Grid
         function renderComplaintsGrid() {
             const grid = document.getElementById('complaintsGrid');
             grid.innerHTML = complaints.map(c => `
@@ -877,7 +1101,6 @@
             });
         }
 
-        // Diagnosis Grid
         function renderDiagnosisGrid() {
             const grid = document.getElementById('diagnosisGrid');
             grid.innerHTML = diagnoses.map(d => `
@@ -910,12 +1133,11 @@
             });
         }
 
-        // Save Case Sheet
         function saveCaseSheet(event) {
             event.preventDefault();
 
             if (selectedComplaints.length === 0 || selectedDiagnoses.length === 0) {
-                alert('Please select at least one complaint and diagnosis');
+                alert('⚠️ Please select at least one complaint and diagnosis');
                 return;
             }
 
@@ -939,17 +1161,16 @@
             };
 
             visits.push(currentVisit);
-            alert('Case sheet saved successfully!');
+            alert('✅ Case sheet saved successfully!');
             showView('prescription');
         }
 
-        // Medicines Grid
         function renderMedicinesGrid() {
             const grid = document.getElementById('medicinesGrid');
             grid.innerHTML = medicines.map((m, i) => `
-                <button type="button" class="quick-select-btn" onclick="addMedicine(${i})" style="text-align: left;">
-                    <div style="font-weight: 700;">${m.name}</div>
-                    <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">${m.dosage} • ${m.frequency}</div>
+                <button type="button" class="quick-select-btn" onclick="addMedicine(${i})" style="text-align: left; flex-direction: column; align-items: flex-start; justify-content: center;">
+                    <div style="font-weight: 700; margin-bottom: 4px;">${m.name}</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">${m.dosage} • ${m.frequency}</div>
                 </button>
             `).join('');
         }
@@ -972,14 +1193,13 @@
             const instructions = document.getElementById('customMedicineInstructions').value;
 
             if (!name || !dosage) {
-                alert('Please enter medicine name and dosage');
+                alert('⚠️ Please enter medicine name and dosage');
                 return;
             }
 
             selectedMedicines.push({ name, dosage, frequency, duration, instructions });
             renderSelectedMedicines();
             
-            // Reset form
             document.getElementById('customMedicineName').value = '';
             document.getElementById('customMedicineDosage').value = '';
             document.getElementById('customMedicineFrequency').value = '';
@@ -1001,14 +1221,14 @@
 
             list.innerHTML = `
                 <h3 class="input-label" style="font-size: 18px; margin-bottom: 16px;">
-                    Prescription (${selectedMedicines.length} medicines)
+                    💊 Prescription (${selectedMedicines.length} medicines)
                 </h3>
                 ${selectedMedicines.map((m, i) => `
                     <div class="medicine-item">
                         <div class="flex-between mb-3">
                             <h4>${i + 1}. ${m.name}</h4>
                             <button class="btn btn-danger" style="min-height: 40px; padding: 8px 16px; font-size: 14px;" onclick="removeMedicine(${i})">
-                                Remove
+                                ❌ Remove
                             </button>
                         </div>
                         <p><strong>Dosage:</strong> ${m.dosage} | <strong>Frequency:</strong> ${m.frequency}</p>
@@ -1025,15 +1245,14 @@
 
         function generatePrescription() {
             if (selectedMedicines.length === 0) {
-                alert('Please add at least one medicine');
+                alert('⚠️ Please add at least one medicine');
                 return;
             }
 
-            alert('Prescription generated successfully!\n\nIn the full version, this will:\n- Generate PDF\n- Send via WhatsApp\n- Save to database');
+            alert('✅ Prescription generated successfully!\n\n📄 PDF will be generated\n📱 WhatsApp message will be sent');
             showView('billing');
         }
 
-        // Billing
         function calculateTotal() {
             const consultation = parseFloat(document.getElementById('consultationFee').value) || 0;
             const procedure = parseFloat(document.getElementById('procedureCharges').value) || 0;
@@ -1043,9 +1262,8 @@
 
         function saveBilling(event) {
             event.preventDefault();
-            alert('Payment recorded successfully!\n\nVisit completed!');
+            alert('✅ Payment recorded successfully!\n\n🎉 Visit completed!');
             
-            // Reset
             currentPatient = null;
             currentVisit = null;
             selectedComplaints = [];
@@ -1057,7 +1275,7 @@
         }
 
         function printReceipt() {
-            alert('Printing receipt...\n\nIn the full version, this will generate and print a PDF receipt.');
+            alert('🖨️ Printing receipt...\n\nPDF receipt will be generated.');
         }
     </script>
 </body>
