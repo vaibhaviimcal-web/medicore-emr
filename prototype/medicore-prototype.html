@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MediCore EMR - Dr. Prakash (Prototype)</title>
+    <style>
+        /* iPad-Optimized Styles */
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --bg-color: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --touch-target: 56px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 16px;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: var(--spacing-lg);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-md);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--bg-color);
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+        }
+
+        /* Buttons */
+        .btn {
+            min-height: var(--touch-target);
+            padding: 0 32px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn-lg {
+            min-height: 64px;
+            font-size: 20px;
+        }
+
+        /* Input Fields */
+        .input-field {
+            min-height: 52px;
+            padding: var(--spacing-md);
+            font-size: 18px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            width: 100%;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .input-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .input-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .card-header {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Patient List */
+        .patient-list {
+            list-style: none;
+        }
+
+        .patient-list-item {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .patient-list-item:hover {
+            background: var(--bg-color);
+        }
+
+        .patient-list-item:active {
+            background: #e2e8f0;
+        }
+
+        .patient-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .patient-info p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Quick Select Buttons */
+        .quick-select-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: var(--spacing-md) 0;
+        }
+
+        .quick-select-btn {
+            min-height: 64px;
+            padding: var(--spacing-md);
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-select-btn:hover {
+            border-color: var(--primary-color);
+            background: #f0f9ff;
+        }
+
+        .quick-select-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+        }
+
+        /* Search Box */
+        .search-box {
+            position: relative;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .search-box input {
+            padding-left: 48px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--spacing-md);
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: #dbeafe;
+            color: var(--primary-color);
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: var(--success-color);
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: var(--warning-color);
+        }
+
+        /* Stats Card */
+        .stats-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-card h3 {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stats-card p {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .mb-3 {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mb-4 {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .mt-3 {
+            margin-top: var(--spacing-md);
+        }
+
+        .mt-4 {
+            margin-top: var(--spacing-lg);
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gap-3 {
+            gap: var(--spacing-md);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Medicine List */
+        .medicine-item {
+            background: #f0f9ff;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin-bottom: 12px;
+        }
+
+        .medicine-item h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>MediCore EMR</h1>
+                <p>Dr. Prakash's Clinic</p>
+            </div>
+
+            <div class="sidebar-content">
+                <button class="btn btn-primary btn-block mb-3" onclick="showView('registration')">
+                    + New Patient
+                </button>
+
+                <button class="btn btn-outline btn-block mb-3" onclick="showView('dashboard')">
+                    🏠 Dashboard
+                </button>
+
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input 
+                        type="text" 
+                        class="input-field" 
+                        placeholder="Search patients..."
+                        oninput="searchPatients(this.value)"
+                    >
+                </div>
+
+                <div id="patientList"></div>
+
+                <div id="currentPatientCard" class="card hidden">
+                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Current Patient</h3>
+                    <div id="currentPatientInfo"></div>
+                    <button class="btn btn-outline btn-block mt-3" onclick="showView('history')">
+                        View History
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboardView">
+                <h2 class="card-header">Dashboard</h2>
+                
+                <div class="form-grid-3 mb-4">
+                    <div class="stats-card">
+                        <h3>Today's Patients</h3>
+                        <p style="color: var(--primary-color);" id="todayPatientsCount">0</p>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Follow-ups Today</h3>
+                        <p style="color: var(--warning-color);" id="followupsCount">0</p>
+                    </div>
+                    <div class="stats-card">
+                        <h3>Today's Collection</h3>
+                        <p style="color: var(--success-color);" id="collectionAmount">₹0</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-header">Recent Patients</h3>
+                    <ul class="patient-list" id="recentPatientsList"></ul>
+                </div>
+            </div>
+
+            <!-- Patient Registration View -->
+            <div id="registrationView" class="hidden">
+                <div class="card">
+                    <h2 class="card-header">New Patient Registration</h2>
+                    
+                    <form onsubmit="registerPatient(event)">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label class="input-label">Name *</label>
+                                <input type="text" class="input-field" id="patientName" required placeholder="Enter patient name">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Age *</label>
+                                <input type="number" class="input-field" id="patientAge" required placeholder="Enter age" min="0" max="150">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label class="input-label">Gender *</label>
+                                <select class="input-field" id="patientGender" required>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Phone *</label>
+                                <input type="tel" class="input-field" id="patientPhone" required placeholder="Enter phone number" pattern="[0-9]{10}">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">Email</label>
+                            <input type="email" class="input-field" id="patientEmail" placeholder="Enter email (optional)">
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">Address</label>
+                            <textarea class="input-field" id="patientAddress" placeholder="Enter address (optional)" rows="3"></textarea>
+                        </div>
+
+                        <div class="flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-primary btn-block">Register Patient</button>
+                            <button type="button" class="btn btn-outline" onclick="showView('dashboard')">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Case Sheet View -->
+            <div id="casesheetView" class="hidden">
+                <div class="card">
+                    <div class="flex-between mb-3">
+                        <div id="casesheetPatientInfo"></div>
+                        <span class="badge badge-success" style="font-size: 16px; padding: 8px 16px;">New Visit</span>
+                    </div>
+
+                    <form onsubmit="saveCaseSheet(event)">
+                        <!-- Chief Complaints -->
+                        <div class="input-group">
+                            <label class="input-label">Chief Complaints *</label>
+                            <div class="quick-select-grid" id="complaintsGrid"></div>
+                        </div>
+
+                        <!-- Vitals -->
+                        <div class="input-group">
+                            <label class="input-label">Vitals</label>
+                            <div class="form-grid-3">
+                                <input type="text" class="input-field" id="vitalBP" placeholder="BP (e.g., 120/80)">
+                                <input type="text" class="input-field" id="vitalTemp" placeholder="Temperature (°F)">
+                                <input type="text" class="input-field" id="vitalPulse" placeholder="Pulse (bpm)">
+                            </div>
+                            <div class="form-grid mt-3">
+                                <input type="text" class="input-field" id="vitalSpO2" placeholder="SpO2 (%)">
+                                <input type="text" class="input-field" id="vitalWeight" placeholder="Weight (kg)">
+                            </div>
+                        </div>
+
+                        <!-- History -->
+                        <div class="input-group">
+                            <label class="input-label">History</label>
+                            <textarea class="input-field" id="history" rows="3" placeholder="History of present illness..."></textarea>
+                        </div>
+
+                        <!-- Examination -->
+                        <div class="input-group">
+                            <label class="input-label">Examination</label>
+                            <textarea class="input-field" id="examination" rows="3" placeholder="Physical examination findings..."></textarea>
+                        </div>
+
+                        <!-- Diagnosis -->
+                        <div class="input-group">
+                            <label class="input-label">Diagnosis *</label>
+                            <div class="quick-select-grid" id="diagnosisGrid"></div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="input-group">
+                            <label class="input-label">Notes</label>
+                            <textarea class="input-field" id="notes" rows="2" placeholder="Additional notes..."></textarea>
+                        </div>
+
+                        <!-- Follow-up Date -->
+                        <div class="input-group">
+                            <label class="input-label">Follow-up Date</label>
+                            <input type="date" class="input-field" id="followupDate">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block btn-lg mt-4">
+                            Save & Continue to Prescription
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Prescription View -->
+            <div id="prescriptionView" class="hidden">
+                <div class="card">
+                    <h2 class="card-header">E-Prescription</h2>
+
+                    <div class="input-group">
+                        <label class="input-label">Quick Select Medicines</label>
+                        <div class="quick-select-grid" id="medicinesGrid"></div>
+                    </div>
+
+                    <button class="btn btn-outline btn-block mt-3" onclick="toggleCustomMedicine()">
+                        + Add Custom Medicine
+                    </button>
+
+                    <div id="customMedicineForm" class="card mt-3 hidden" style="background: var(--bg-color);">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label class="input-label">Medicine Name</label>
+                                <input type="text" class="input-field" id="customMedicineName" placeholder="Enter medicine name">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Dosage</label>
+                                <input type="text" class="input-field" id="customMedicineDosage" placeholder="e.g., 500mg">
+                            </div>
+                        </div>
+                        <div class="form-grid-3">
+                            <div class="input-group">
+                                <label class="input-label">Frequency</label>
+                                <select class="input-field" id="customMedicineFrequency">
+                                    <option value="">Select</option>
+                                    <option value="OD">OD (Once daily)</option>
+                                    <option value="BD">BD (Twice daily)</option>
+                                    <option value="TDS">TDS (Three times)</option>
+                                    <option value="QID">QID (Four times)</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Duration</label>
+                                <select class="input-field" id="customMedicineDuration">
+                                    <option value="">Select</option>
+                                    <option value="3 days">3 days</option>
+                                    <option value="5 days">5 days</option>
+                                    <option value="7 days">7 days</option>
+                                    <option value="10 days">10 days</option>
+                                    <option value="15 days">15 days</option>
+                                    <option value="30 days">30 days</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Instructions</label>
+                                <select class="input-field" id="customMedicineInstructions">
+                                    <option value="">Select</option>
+                                    <option value="Before food">Before food</option>
+                                    <option value="After food">After food</option>
+                                    <option value="With food">With food</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-block mt-3" onclick="addCustomMedicine()">Add Medicine</button>
+                    </div>
+
+                    <div id="selectedMedicinesList" class="mt-4"></div>
+
+                    <div class="flex gap-3 mt-4 hidden" id="prescriptionActions">
+                        <button class="btn btn-success btn-block btn-lg" onclick="generatePrescription()">
+                            Generate Prescription PDF
+                        </button>
+                        <button class="btn btn-primary btn-lg" onclick="generatePrescription()">
+                            Save & WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing View -->
+            <div id="billingView" class="hidden">
+                <div class="card">
+                    <h2 class="card-header">Billing & Payment</h2>
+
+                    <form onsubmit="saveBilling(event)">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label class="input-label">Consultation Fee (₹)</label>
+                                <input type="number" class="input-field" id="consultationFee" value="500" min="0" step="0.01" oninput="calculateTotal()">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Procedure Charges (₹)</label>
+                                <input type="number" class="input-field" id="procedureCharges" value="0" min="0" step="0.01" oninput="calculateTotal()">
+                            </div>
+                        </div>
+
+                        <div class="card mt-3" style="background: #f0fdf4; border: 2px solid var(--success-color);">
+                            <div class="flex-between">
+                                <h3 style="font-size: 20px; font-weight: 700;">Total Amount</h3>
+                                <p style="font-size: 32px; font-weight: 700; color: var(--success-color);" id="totalAmount">₹500.00</p>
+                            </div>
+                        </div>
+
+                        <div class="form-grid mt-3">
+                            <div class="input-group">
+                                <label class="input-label">Payment Mode</label>
+                                <select class="input-field" id="paymentMode">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Net Banking">Net Banking</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Payment Status</label>
+                                <select class="input-field" id="paymentStatus">
+                                    <option value="Paid">Paid</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Partial">Partial</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-success btn-block btn-lg">Record Payment</button>
+                            <button type="button" class="btn btn-outline btn-lg" onclick="printReceipt()">Print Receipt</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Patient History View -->
+            <div id="historyView" class="hidden">
+                <div class="card">
+                    <h2 class="card-header">Visit History</h2>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample Data Storage (In real app, this would be API calls)
+        let patients = [
+            { id: 1, code: 'P000001', name: 'Ramesh Kumar', age: 45, gender: 'Male', phone: '9876543210', email: 'ramesh@example.com' },
+            { id: 2, code: 'P000002', name: 'Priya Sharma', age: 32, gender: 'Female', phone: '9876543211', email: 'priya@example.com' },
+            { id: 3, code: 'P000003', name: 'Suresh Patil', age: 58, gender: 'Male', phone: '9876543212', email: 'suresh@example.com' }
+        ];
+
+        let visits = [];
+        let currentPatient = null;
+        let currentVisit = null;
+        let selectedComplaints = [];
+        let selectedDiagnoses = [];
+        let selectedMedicines = [];
+
+        // Master Data
+        const complaints = ['Fever', 'Cough', 'Breathless', 'Joint pains', 'Abdominal pain', 'General weakness'];
+        const diagnoses = ['Viral fever', 'Diabetes', 'Hypertension', 'CKD'];
+        const medicines = [
+            { name: 'Crocin', dosage: '500mg', frequency: 'TDS', duration: '3 days', instructions: 'After food' },
+            { name: 'Voveran', dosage: '50mg', frequency: 'BD', duration: '5 days', instructions: 'After food' },
+            { name: 'Glykind-M', dosage: '500mg', frequency: 'BD', duration: '30 days', instructions: 'Before food' },
+            { name: 'Cap Omez', dosage: '20mg', frequency: 'OD', duration: '7 days', instructions: 'Before food' },
+            { name: 'Becasule', dosage: '1 cap', frequency: 'OD', duration: '30 days', instructions: 'After food' }
+        ];
+
+        // Initialize
+        window.onload = function() {
+            renderDashboard();
+            renderPatientList();
+            renderComplaintsGrid();
+            renderDiagnosisGrid();
+            renderMedicinesGrid();
+        };
+
+        // View Management
+        function showView(viewName) {
+            const views = ['dashboard', 'registration', 'casesheet', 'prescription', 'billing', 'history'];
+            views.forEach(view => {
+                document.getElementById(view + 'View').classList.add('hidden');
+            });
+            document.getElementById(viewName + 'View').classList.remove('hidden');
+        }
+
+        // Dashboard
+        function renderDashboard() {
+            document.getElementById('todayPatientsCount').textContent = patients.length;
+            document.getElementById('followupsCount').textContent = '0';
+            document.getElementById('collectionAmount').textContent = '₹0';
+
+            const recentList = document.getElementById('recentPatientsList');
+            recentList.innerHTML = patients.map(p => `
+                <li class="patient-list-item" onclick="selectPatient(${p.id})">
+                    <div class="patient-info">
+                        <h3>${p.name}</h3>
+                        <p>${p.age} years • ${p.gender} • ${p.phone}</p>
+                    </div>
+                    <span class="badge badge-primary">${p.code}</span>
+                </li>
+            `).join('');
+        }
+
+        // Patient List
+        function renderPatientList() {
+            const list = document.getElementById('patientList');
+            list.innerHTML = `
+                <ul class="patient-list">
+                    ${patients.slice(0, 5).map(p => `
+                        <li class="patient-list-item" onclick="selectPatient(${p.id})">
+                            <div class="patient-info">
+                                <h3>${p.name}</h3>
+                                <p>${p.age}y • ${p.gender}</p>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+
+        // Search Patients
+        function searchPatients(query) {
+            if (query.length < 2) {
+                renderPatientList();
+                return;
+            }
+
+            const filtered = patients.filter(p => 
+                p.name.toLowerCase().includes(query.toLowerCase()) ||
+                p.phone.includes(query) ||
+                p.code.includes(query)
+            );
+
+            const list = document.getElementById('patientList');
+            list.innerHTML = `
+                <ul class="patient-list">
+                    ${filtered.map(p => `
+                        <li class="patient-list-item" onclick="selectPatient(${p.id})">
+                            <div class="patient-info">
+                                <h3>${p.name}</h3>
+                                <p>${p.age}y • ${p.gender} • ${p.phone}</p>
+                            </div>
+                            <span class="badge badge-primary">${p.code}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+
+        // Select Patient
+        function selectPatient(patientId) {
+            currentPatient = patients.find(p => p.id === patientId);
+            
+            document.getElementById('currentPatientCard').classList.remove('hidden');
+            document.getElementById('currentPatientInfo').innerHTML = `
+                <p style="font-size: 18px; font-weight: 700;">${currentPatient.name}</p>
+                <p style="font-size: 14px; color: var(--text-secondary);">${currentPatient.age} years • ${currentPatient.gender}</p>
+                <p style="font-size: 14px; color: var(--text-secondary);">${currentPatient.phone}</p>
+            `;
+
+            document.getElementById('casesheetPatientInfo').innerHTML = `
+                <div>
+                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">${currentPatient.name}</h2>
+                    <p style="color: var(--text-secondary);">${currentPatient.age} years • ${currentPatient.gender} • ${currentPatient.code}</p>
+                </div>
+            `;
+
+            showView('casesheet');
+        }
+
+        // Register Patient
+        function registerPatient(event) {
+            event.preventDefault();
+
+            const newPatient = {
+                id: patients.length + 1,
+                code: `P${String(patients.length + 1).padStart(6, '0')}`,
+                name: document.getElementById('patientName').value,
+                age: parseInt(document.getElementById('patientAge').value),
+                gender: document.getElementById('patientGender').value,
+                phone: document.getElementById('patientPhone').value,
+                email: document.getElementById('patientEmail').value
+            };
+
+            patients.push(newPatient);
+            alert('Patient registered successfully!');
+            
+            selectPatient(newPatient.id);
+            event.target.reset();
+        }
+
+        // Complaints Grid
+        function renderComplaintsGrid() {
+            const grid = document.getElementById('complaintsGrid');
+            grid.innerHTML = complaints.map(c => `
+                <button type="button" class="quick-select-btn" onclick="toggleComplaint('${c}')">
+                    ${c}
+                </button>
+            `).join('');
+        }
+
+        function toggleComplaint(complaint) {
+            const index = selectedComplaints.indexOf(complaint);
+            if (index > -1) {
+                selectedComplaints.splice(index, 1);
+            } else {
+                selectedComplaints.push(complaint);
+            }
+            updateComplaintsUI();
+        }
+
+        function updateComplaintsUI() {
+            complaints.forEach(c => {
+                const btn = Array.from(document.querySelectorAll('#complaintsGrid button')).find(b => b.textContent.trim() === c);
+                if (btn) {
+                    if (selectedComplaints.includes(c)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        // Diagnosis Grid
+        function renderDiagnosisGrid() {
+            const grid = document.getElementById('diagnosisGrid');
+            grid.innerHTML = diagnoses.map(d => `
+                <button type="button" class="quick-select-btn" onclick="toggleDiagnosis('${d}')">
+                    ${d}
+                </button>
+            `).join('');
+        }
+
+        function toggleDiagnosis(diagnosis) {
+            const index = selectedDiagnoses.indexOf(diagnosis);
+            if (index > -1) {
+                selectedDiagnoses.splice(index, 1);
+            } else {
+                selectedDiagnoses.push(diagnosis);
+            }
+            updateDiagnosisUI();
+        }
+
+        function updateDiagnosisUI() {
+            diagnoses.forEach(d => {
+                const btn = Array.from(document.querySelectorAll('#diagnosisGrid button')).find(b => b.textContent.trim() === d);
+                if (btn) {
+                    if (selectedDiagnoses.includes(d)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        // Save Case Sheet
+        function saveCaseSheet(event) {
+            event.preventDefault();
+
+            if (selectedComplaints.length === 0 || selectedDiagnoses.length === 0) {
+                alert('Please select at least one complaint and diagnosis');
+                return;
+            }
+
+            currentVisit = {
+                id: visits.length + 1,
+                patientId: currentPatient.id,
+                date: new Date(),
+                complaints: [...selectedComplaints],
+                vitals: {
+                    bp: document.getElementById('vitalBP').value,
+                    temp: document.getElementById('vitalTemp').value,
+                    pulse: document.getElementById('vitalPulse').value,
+                    spo2: document.getElementById('vitalSpO2').value,
+                    weight: document.getElementById('vitalWeight').value
+                },
+                history: document.getElementById('history').value,
+                examination: document.getElementById('examination').value,
+                diagnosis: [...selectedDiagnoses],
+                notes: document.getElementById('notes').value,
+                followupDate: document.getElementById('followupDate').value
+            };
+
+            visits.push(currentVisit);
+            alert('Case sheet saved successfully!');
+            showView('prescription');
+        }
+
+        // Medicines Grid
+        function renderMedicinesGrid() {
+            const grid = document.getElementById('medicinesGrid');
+            grid.innerHTML = medicines.map((m, i) => `
+                <button type="button" class="quick-select-btn" onclick="addMedicine(${i})" style="text-align: left;">
+                    <div style="font-weight: 700;">${m.name}</div>
+                    <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">${m.dosage} • ${m.frequency}</div>
+                </button>
+            `).join('');
+        }
+
+        function addMedicine(index) {
+            selectedMedicines.push({...medicines[index]});
+            renderSelectedMedicines();
+        }
+
+        function toggleCustomMedicine() {
+            const form = document.getElementById('customMedicineForm');
+            form.classList.toggle('hidden');
+        }
+
+        function addCustomMedicine() {
+            const name = document.getElementById('customMedicineName').value;
+            const dosage = document.getElementById('customMedicineDosage').value;
+            const frequency = document.getElementById('customMedicineFrequency').value;
+            const duration = document.getElementById('customMedicineDuration').value;
+            const instructions = document.getElementById('customMedicineInstructions').value;
+
+            if (!name || !dosage) {
+                alert('Please enter medicine name and dosage');
+                return;
+            }
+
+            selectedMedicines.push({ name, dosage, frequency, duration, instructions });
+            renderSelectedMedicines();
+            
+            // Reset form
+            document.getElementById('customMedicineName').value = '';
+            document.getElementById('customMedicineDosage').value = '';
+            document.getElementById('customMedicineFrequency').value = '';
+            document.getElementById('customMedicineDuration').value = '';
+            document.getElementById('customMedicineInstructions').value = '';
+            toggleCustomMedicine();
+        }
+
+        function renderSelectedMedicines() {
+            const list = document.getElementById('selectedMedicinesList');
+            
+            if (selectedMedicines.length === 0) {
+                list.innerHTML = '';
+                document.getElementById('prescriptionActions').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('prescriptionActions').classList.remove('hidden');
+
+            list.innerHTML = `
+                <h3 class="input-label" style="font-size: 18px; margin-bottom: 16px;">
+                    Prescription (${selectedMedicines.length} medicines)
+                </h3>
+                ${selectedMedicines.map((m, i) => `
+                    <div class="medicine-item">
+                        <div class="flex-between mb-3">
+                            <h4>${i + 1}. ${m.name}</h4>
+                            <button class="btn btn-danger" style="min-height: 40px; padding: 8px 16px; font-size: 14px;" onclick="removeMedicine(${i})">
+                                Remove
+                            </button>
+                        </div>
+                        <p><strong>Dosage:</strong> ${m.dosage} | <strong>Frequency:</strong> ${m.frequency}</p>
+                        <p><strong>Duration:</strong> ${m.duration} | <strong>Instructions:</strong> ${m.instructions}</p>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function removeMedicine(index) {
+            selectedMedicines.splice(index, 1);
+            renderSelectedMedicines();
+        }
+
+        function generatePrescription() {
+            if (selectedMedicines.length === 0) {
+                alert('Please add at least one medicine');
+                return;
+            }
+
+            alert('Prescription generated successfully!\n\nIn the full version, this will:\n- Generate PDF\n- Send via WhatsApp\n- Save to database');
+            showView('billing');
+        }
+
+        // Billing
+        function calculateTotal() {
+            const consultation = parseFloat(document.getElementById('consultationFee').value) || 0;
+            const procedure = parseFloat(document.getElementById('procedureCharges').value) || 0;
+            const total = consultation + procedure;
+            document.getElementById('totalAmount').textContent = `₹${total.toFixed(2)}`;
+        }
+
+        function saveBilling(event) {
+            event.preventDefault();
+            alert('Payment recorded successfully!\n\nVisit completed!');
+            
+            // Reset
+            currentPatient = null;
+            currentVisit = null;
+            selectedComplaints = [];
+            selectedDiagnoses = [];
+            selectedMedicines = [];
+            
+            showView('dashboard');
+            renderDashboard();
+        }
+
+        function printReceipt() {
+            alert('Printing receipt...\n\nIn the full version, this will generate and print a PDF receipt.');
+        }
+    </script>
+</body>
+</html>
