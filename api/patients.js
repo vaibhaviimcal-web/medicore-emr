@@ -18,6 +18,8 @@ export default async function handler(req, res) {
   try {
     const url = `${SUPABASE_URL}/rest/v1/patients?select=*`;
     
+    console.log('Attempting to fetch:', url);
+    
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -27,12 +29,19 @@ export default async function handler(req, res) {
       }
     });
 
+    console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
     const data = await response.json();
+    console.log('Response data:', data);
 
     if (!response.ok) {
       return res.status(response.status).json({ 
-        error: data.message || 'Supabase request failed',
-        details: data 
+        error: 'Supabase request failed',
+        status: response.status,
+        statusText: response.statusText,
+        details: data,
+        url: url
       });
     }
 
@@ -43,9 +52,13 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
+    console.error('Fetch error:', error);
     return res.status(500).json({ 
       error: 'Server error', 
-      message: error.message 
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      cause: error.cause
     });
   }
 }
