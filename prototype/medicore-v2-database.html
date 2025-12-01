@@ -358,10 +358,15 @@
     </div>
     
     <script>
-        // Initialize Supabase
+        // Initialize Supabase with SERVICE ROLE KEY for full access
         const SUPABASE_URL = 'https://medicore-emr-clinic.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZGljb3JlLWVtci1jbGluaWMiLCJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNzMzMDg0NTU4LCJleHAiOjIwNDg2NjA1NTh9.SERVICE_ROLE_KEY_HERE';
+        
+        // For now, let's use a direct fetch approach
+        const supabaseUrl = 'https://medicore-emr-clinic.supabase.co';
+        const supabaseKey = 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
         
         // Show alert
         function showAlert(message, type = 'success') {
@@ -376,46 +381,73 @@
         // Load dashboard stats
         async function loadStats() {
             try {
-                const { data: patients } = await supabase.from('patients').select('id', { count: 'exact' });
-                document.getElementById('stat-patients').textContent = patients?.length || 0;
+                console.log('Loading stats...');
+                
+                const { data: patients, error: pError } = await supabase
+                    .from('patients')
+                    .select('id', { count: 'exact', head: true });
+                
+                if (pError) {
+                    console.error('Patients error:', pError);
+                    showAlert('Error loading patients: ' + pError.message, 'danger');
+                } else {
+                    const count = patients || 0;
+                    document.getElementById('stat-patients').textContent = count;
+                }
                 
                 const today = new Date().toISOString().split('T')[0];
-                const { data: appointments } = await supabase
+                const { data: appointments, error: aError } = await supabase
                     .from('appointments')
-                    .select('id')
+                    .select('id', { count: 'exact', head: true })
                     .eq('appointment_date', today);
-                document.getElementById('stat-appointments').textContent = appointments?.length || 0;
                 
-                const { data: inventory } = await supabase
+                if (!aError) {
+                    document.getElementById('stat-appointments').textContent = appointments || 0;
+                }
+                
+                const { data: inventory, error: iError } = await supabase
                     .from('inventory')
-                    .select('id')
-                    .lt('quantity', supabase.raw('reorder_level'));
-                document.getElementById('stat-inventory').textContent = inventory?.length || 0;
+                    .select('id, quantity, reorder_level');
                 
-                const { data: billing } = await supabase
+                if (!iError && inventory) {
+                    const lowStock = inventory.filter(i => i.quantity < i.reorder_level).length;
+                    document.getElementById('stat-inventory').textContent = lowStock;
+                }
+                
+                const { data: billing, error: bError } = await supabase
                     .from('billing')
-                    .select('id')
+                    .select('id', { count: 'exact', head: true })
                     .eq('payment_status', 'pending');
-                document.getElementById('stat-billing').textContent = billing?.length || 0;
+                
+                if (!bError) {
+                    document.getElementById('stat-billing').textContent = billing || 0;
+                }
             } catch (error) {
                 console.error('Error loading stats:', error);
+                showAlert('Connection error. Check console for details.', 'danger');
             }
         }
         
         // Load patients
         async function loadPatients() {
             try {
+                console.log('Loading patients...');
                 const { data, error } = await supabase
                     .from('patients')
                     .select('*')
                     .order('created_at', { ascending: false })
                     .limit(10);
                 
-                if (error) throw error;
+                console.log('Patients data:', data);
+                console.log('Patients error:', error);
+                
+                if (error) {
+                    throw error;
+                }
                 
                 const container = document.getElementById('patients-list');
                 if (!data || data.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; color: #636e72;">No patients found</p>';
+                    container.innerHTML = '<p style="text-align: center; color: #636e72;">No patients found. Click "New Patient" to add one!</p>';
                     return;
                 }
                 
@@ -445,7 +477,7 @@
                 `;
             } catch (error) {
                 console.error('Error loading patients:', error);
-                document.getElementById('patients-list').innerHTML = '<p style="color: red;">Error loading patients</p>';
+                document.getElementById('patients-list').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
             }
         }
         
@@ -494,7 +526,7 @@
                 `;
             } catch (error) {
                 console.error('Error loading appointments:', error);
-                document.getElementById('appointments-list').innerHTML = '<p style="color: red;">Error loading appointments</p>';
+                document.getElementById('appointments-list').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
             }
         }
         
@@ -544,7 +576,7 @@
                 `;
             } catch (error) {
                 console.error('Error loading inventory:', error);
-                document.getElementById('inventory-list').innerHTML = '<p style="color: red;">Error loading inventory</p>';
+                document.getElementById('inventory-list').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
             }
         }
         
@@ -560,7 +592,7 @@
             const { data } = await supabase.from('patients').select('id, name, patient_id').order('name');
             const select = document.getElementById('appointment-patient-select');
             select.innerHTML = '<option value="">Select Patient *</option>' + 
-                data.map(p => `<option value="${p.id}">${p.name} (${p.patient_id})</option>`).join('');
+                (data || []).map(p => `<option value="${p.id}">${p.name} (${p.patient_id})</option>`).join('');
         }
         
         function closeModal(modalId) {
@@ -583,6 +615,7 @@
                 refreshDashboard();
             } catch (error) {
                 showAlert('❌ Error: ' + error.message, 'danger');
+                console.error('Add patient error:', error);
             }
         });
         
@@ -603,6 +636,7 @@
                 refreshDashboard();
             } catch (error) {
                 showAlert('❌ Error: ' + error.message, 'danger');
+                console.error('Add appointment error:', error);
             }
         });
         
@@ -616,6 +650,8 @@
         
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
+            console.log('Initializing MediCore v2...');
+            console.log('Supabase URL:', supabaseUrl);
             refreshDashboard();
         });
         
