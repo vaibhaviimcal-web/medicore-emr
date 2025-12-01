@@ -1,6 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
+// In-memory storage for new appointments (session-based)
+let newAppointments = [];
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -13,14 +16,17 @@ export default async function handler(req, res) {
   try {
     const filePath = path.join(process.cwd(), 'data', 'appointments.json');
     const fileData = fs.readFileSync(filePath, 'utf8');
-    const appointments = JSON.parse(fileData);
+    const baseAppointments = JSON.parse(fileData);
+    
+    // Combine base appointments with new appointments
+    const allAppointments = [...baseAppointments, ...newAppointments];
 
     if (req.method === 'GET') {
       const { date } = req.query;
-      let filtered = appointments;
+      let filtered = allAppointments;
       
       if (date) {
-        filtered = appointments.filter(a => a.appointment_date === date);
+        filtered = allAppointments.filter(a => a.appointment_date === date);
       }
       
       return res.status(200).json({ 
@@ -32,14 +38,15 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
       const newAppointment = req.body;
-      newAppointment.id = String(appointments.length + 1);
+      newAppointment.id = String(allAppointments.length + 1);
       newAppointment.created_at = new Date().toISOString();
       
-      appointments.push(newAppointment);
-      fs.writeFileSync(filePath, JSON.stringify(appointments, null, 2));
+      // Add to in-memory storage
+      newAppointments.push(newAppointment);
       
       return res.status(201).json({ 
-        success: true, 
+        success: true,
+        message: 'Appointment scheduled successfully (session-based storage)',
         data: newAppointment 
       });
     }
