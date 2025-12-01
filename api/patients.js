@@ -1,4 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+import fs from 'fs';
+import path from 'path';
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -11,46 +12,42 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const SUPABASE_URL = 'https://admsbebpvpnqcycrydxy.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu';
-
   try {
-    // Create Supabase client
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    console.log('Querying patients table...');
-    
-    // Query patients
-    const { data, error, count } = await supabase
-      .from('patients')
-      .select('*', { count: 'exact' });
+    // Read patients data from JSON file
+    const filePath = path.join(process.cwd(), 'data', 'patients.json');
+    const fileData = fs.readFileSync(filePath, 'utf8');
+    const patients = JSON.parse(fileData);
 
-    console.log('Query result:', { data, error, count });
-
-    if (error) {
-      console.error('Supabase error:', error);
-      return res.status(400).json({ 
-        error: 'Supabase query failed',
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
-        code: error.code
+    if (req.method === 'GET') {
+      return res.status(200).json({ 
+        success: true, 
+        count: patients.length,
+        data: patients 
       });
     }
 
-    return res.status(200).json({ 
-      success: true, 
-      count: data.length,
-      data 
-    });
+    if (req.method === 'POST') {
+      const newPatient = req.body;
+      newPatient.id = String(patients.length + 1);
+      newPatient.patient_id = `P${String(patients.length + 1).padStart(6, '0')}`;
+      newPatient.created_at = new Date().toISOString();
+      
+      patients.push(newPatient);
+      fs.writeFileSync(filePath, JSON.stringify(patients, null, 2));
+      
+      return res.status(201).json({ 
+        success: true, 
+        data: newPatient 
+      });
+    }
+
+    return res.status(405).json({ error: 'Method not allowed' });
 
   } catch (error) {
-    console.error('Server error:', error);
+    console.error('API error:', error);
     return res.status(500).json({ 
       error: 'Server error', 
-      message: error.message,
-      stack: error.stack,
-      name: error.name
+      message: error.message
     });
   }
 }
