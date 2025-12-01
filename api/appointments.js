@@ -1,8 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-
-// In-memory storage for new appointments (session-based)
-let newAppointments = [];
+import clientPromise from '../lib/mongodb';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -14,40 +10,61 @@ export default async function handler(req, res) {
   }
 
   try {
-    const filePath = path.join(process.cwd(), 'data', 'appointments.json');
-    const fileData = fs.readFileSync(filePath, 'utf8');
-    const baseAppointments = JSON.parse(fileData);
-    
-    // Combine base appointments with new appointments
-    const allAppointments = [...baseAppointments, ...newAppointments];
+    const client = await clientPromise;
+    const db = client.db('medicore-emr');
+    const collection = db.collection('appointments');
 
     if (req.method === 'GET') {
       const { date } = req.query;
-      let filtered = allAppointments;
+      const query = date ? { appointment_date: date } : {};
       
-      if (date) {
-        filtered = allAppointments.filter(a => a.appointment_date === date);
-      }
+      const appointments = await collection.find(query).sort({ appointment_date: 1, appointment_time: 1 }).toArray();
       
       return res.status(200).json({ 
         success: true, 
-        count: filtered.length,
-        data: filtered 
+        count: appointments.length,
+        data: appointments 
       });
     }
 
     if (req.method === 'POST') {
       const newAppointment = req.body;
-      newAppointment.id = String(allAppointments.length + 1);
       newAppointment.created_at = new Date().toISOString();
       
-      // Add to in-memory storage
-      newAppointments.push(newAppointment);
+      const result = await collection.insertOne(newAppointment);
+      newAppointment._id = result.insertedId;
       
       return res.status(201).json({ 
         success: true,
-        message: 'Appointment scheduled successfully (session-based storage)',
+        message: 'Appointment scheduled successfully!',
         data: newAppointment 
+      });
+    }
+
+    if (req.method === 'PUT') {
+      const { id, ...updateData } = req.body;
+      
+      const result = await collection.updateOne(
+        { _id: id },
+        { $set: updateData }
+      );
+      
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Appointment updated successfully',
+        modified: result.modifiedCount
+      });
+    }
+
+    if (req.method === 'DELETE') {
+      const { id } = req.query;
+      
+      const result = await collection.deleteOne({ _id: id });
+      
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Appointment deleted successfully',
+        deleted: result.deletedCount
       });
     }
 
