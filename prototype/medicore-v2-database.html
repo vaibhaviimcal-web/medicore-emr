@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCore Pro v2 - Working Version</title>
+    <title>MediCore Pro v2 - MongoDB Version</title>
     <style>
         :root {
             --primary: #4a5fc1;
@@ -238,7 +238,7 @@
     <div class="container">
         <div class="header">
             <h1>🏥 MediCore Pro v2</h1>
-            <p>✅ Now Working with JSON Storage!</p>
+            <p>💾 Permanent MongoDB Storage - Data Persists Forever!</p>
         </div>
         
         <div id="alert-container"></div>
@@ -271,6 +271,7 @@
                 <button class="btn btn-success" onclick="showAddAppointmentModal()">📅 New Appointment</button>
                 <button class="btn btn-primary" onclick="loadInventory()">📦 View Inventory</button>
                 <button class="btn btn-success" onclick="refreshDashboard()">🔄 Refresh</button>
+                <button class="btn btn-warning" onclick="seedDatabase()" style="background: var(--warning);">🌱 Seed Database</button>
             </div>
         </div>
         
@@ -374,6 +375,22 @@
             setTimeout(() => alert.remove(), 5000);
         }
         
+        // Seed database
+        async function seedDatabase() {
+            try {
+                showAlert('🌱 Seeding database...', 'success');
+                const response = await fetch(`${API_BASE}/seed`, { method: 'POST' });
+                const result = await response.json();
+                
+                if (!response.ok) throw new Error(result.error || 'Seed failed');
+                
+                showAlert(`✅ ${result.message}`, 'success');
+                refreshDashboard();
+            } catch (error) {
+                showAlert('❌ Seed error: ' + error.message, 'danger');
+            }
+        }
+        
         // Load dashboard stats
         async function loadStats() {
             try {
@@ -409,7 +426,7 @@
                 
                 const container = document.getElementById('patients-list');
                 if (!result.data || result.data.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; color: #636e72;">No patients found. Click "New Patient" to add one!</p>';
+                    container.innerHTML = '<p style="text-align: center; color: #636e72;">No patients found. Click "Seed Database" or "New Patient" to add data!</p>';
                     return;
                 }
                 
@@ -542,7 +559,7 @@
             const result = await response.json();
             const select = document.getElementById('appointment-patient-select');
             select.innerHTML = '<option value="">Select Patient *</option>' + 
-                (result.data || []).map(p => `<option value="${p.id}">${p.name} (${p.patient_id})</option>`).join('');
+                (result.data || []).map(p => `<option value="${p.id || p._id}">${p.name} (${p.patient_id})</option>`).join('');
         }
         
         function closeModal(modalId) {
@@ -566,7 +583,7 @@
                 
                 if (!response.ok) throw new Error(result.error || 'Failed to add patient');
                 
-                showAlert('✅ Patient added successfully!', 'success');
+                showAlert('✅ Patient added successfully to permanent storage!', 'success');
                 closeModal('add-patient-modal');
                 e.target.reset();
                 refreshDashboard();
@@ -616,8 +633,22 @@
         }
         
         // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 Initializing MediCore v2 with JSON storage...');
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Initializing MediCore v2 with MongoDB...');
+            
+            // Auto-seed if no data exists
+            try {
+                const response = await fetch(`${API_BASE}/patients`);
+                const result = await response.json();
+                
+                if (!result.data || result.data.length === 0) {
+                    console.log('📦 No data found, auto-seeding...');
+                    await seedDatabase();
+                }
+            } catch (error) {
+                console.error('Init error:', error);
+            }
+            
             refreshDashboard();
         });
         
