@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy API Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 40px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .test {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            background: #000;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #00aaff; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Vercel Proxy API Test</h1>
+    
+    <div class="test">
+        <h3>Configuration:</h3>
+        <div class="info">Using Vercel serverless function as proxy</div>
+        <div class="info">This bypasses browser CORS restrictions!</div>
+    </div>
+    
+    <div class="test">
+        <h3>Proxy Test:</h3>
+        <div id="proxy-test"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Patients Query:</h3>
+        <div id="patients"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Raw Response:</h3>
+        <pre id="raw"></pre>
+    </div>
+    
+    <script>
+        async function testProxy() {
+            try {
+                document.getElementById('proxy-test').innerHTML = '<div class="info">⏳ Testing proxy API...</div>';
+                
+                // Call our Vercel serverless function
+                const url = '/api/patients';
+                
+                document.getElementById('proxy-test').innerHTML += `<div class="info">Fetching: ${url}</div>`;
+                
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                document.getElementById('raw').textContent = JSON.stringify(result, null, 2);
+                
+                if (!response.ok || !result.success) {
+                    document.getElementById('proxy-test').innerHTML += `<div class="error">❌ Error: ${response.status}</div>`;
+                    document.getElementById('patients').innerHTML = `<div class="error">Failed: ${result.error || 'Unknown error'}</div>`;
+                } else {
+                    document.getElementById('proxy-test').innerHTML += `<div class="success">✅ Proxy working! Status: ${response.status}</div>`;
+                    document.getElementById('patients').innerHTML = `<div class="success">✅ Query successful!</div>`;
+                    document.getElementById('patients').innerHTML += `<div class="success">Found ${result.count} patients</div>`;
+                    
+                    if (result.data && result.data.length > 0) {
+                        result.data.forEach((p, i) => {
+                            document.getElementById('patients').innerHTML += 
+                                `<div class="info">${i+1}. ${p.name} - ${p.age}y - ${p.gender} - ${p.phone}</div>`;
+                        });
+                    }
+                }
+                
+            } catch (err) {
+                document.getElementById('proxy-test').innerHTML += `<div class="error">❌ Fetch failed: ${err.message}</div>`;
+                document.getElementById('raw').textContent = err.stack;
+            }
+        }
+        
+        // Run test on load
+        window.addEventListener('DOMContentLoaded', testProxy);
+    </script>
+</body>
+</html>
