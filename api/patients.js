@@ -1,5 +1,4 @@
-// Vercel Serverless Function to proxy Supabase requests
-// This bypasses CORS issues by making server-side requests
+import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -16,32 +15,26 @@ export default async function handler(req, res) {
   const SUPABASE_KEY = 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu';
 
   try {
-    const url = `${SUPABASE_URL}/rest/v1/patients?select=*`;
+    // Create Supabase client
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    console.log('Attempting to fetch:', url);
+    console.log('Querying patients table...');
     
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    // Query patients
+    const { data, error, count } = await supabase
+      .from('patients')
+      .select('*', { count: 'exact' });
 
-    console.log('Response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+    console.log('Query result:', { data, error, count });
 
-    const data = await response.json();
-    console.log('Response data:', data);
-
-    if (!response.ok) {
-      return res.status(response.status).json({ 
-        error: 'Supabase request failed',
-        status: response.status,
-        statusText: response.statusText,
-        details: data,
-        url: url
+    if (error) {
+      console.error('Supabase error:', error);
+      return res.status(400).json({ 
+        error: 'Supabase query failed',
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
       });
     }
 
@@ -52,13 +45,12 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('Fetch error:', error);
+    console.error('Server error:', error);
     return res.status(500).json({ 
       error: 'Server error', 
       message: error.message,
       stack: error.stack,
-      name: error.name,
-      cause: error.cause
+      name: error.name
     });
   }
 }
