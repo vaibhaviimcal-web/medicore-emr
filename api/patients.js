@@ -1,6 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
+// In-memory storage for new patients (session-based)
+let newPatients = [];
+
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,30 +16,34 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Read patients data from JSON file
+    // Read base patients data from JSON file
     const filePath = path.join(process.cwd(), 'data', 'patients.json');
     const fileData = fs.readFileSync(filePath, 'utf8');
-    const patients = JSON.parse(fileData);
+    const basePatients = JSON.parse(fileData);
+    
+    // Combine base patients with new patients
+    const allPatients = [...basePatients, ...newPatients];
 
     if (req.method === 'GET') {
       return res.status(200).json({ 
         success: true, 
-        count: patients.length,
-        data: patients 
+        count: allPatients.length,
+        data: allPatients 
       });
     }
 
     if (req.method === 'POST') {
       const newPatient = req.body;
-      newPatient.id = String(patients.length + 1);
-      newPatient.patient_id = `P${String(patients.length + 1).padStart(6, '0')}`;
+      newPatient.id = String(allPatients.length + 1);
+      newPatient.patient_id = `P${String(allPatients.length + 1).padStart(6, '0')}`;
       newPatient.created_at = new Date().toISOString();
       
-      patients.push(newPatient);
-      fs.writeFileSync(filePath, JSON.stringify(patients, null, 2));
+      // Add to in-memory storage
+      newPatients.push(newPatient);
       
       return res.status(201).json({ 
         success: true, 
+        message: 'Patient added successfully (session-based storage)',
         data: newPatient 
       });
     }
