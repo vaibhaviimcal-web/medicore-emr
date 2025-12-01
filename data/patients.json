@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "patient_id": "P000001",
+    "name": "Ramesh Kumar",
+    "age": 45,
+    "gender": "Male",
+    "phone": "9876543210",
+    "email": "ramesh.kumar@email.com",
+    "blood_group": "O+",
+    "address": "123 MG Road, Bangalore",
+    "created_at": "2024-12-01T10:00:00Z"
+  },
+  {
+    "id": "2",
+    "patient_id": "P000002",
+    "name": "Priya Sharma",
+    "age": 32,
+    "gender": "Female",
+    "phone": "9876543211",
+    "email": "priya.sharma@email.com",
+    "blood_group": "A+",
+    "address": "456 Brigade Road, Bangalore",
+    "created_at": "2024-12-01T11:00:00Z"
+  },
+  {
+    "id": "3",
+    "patient_id": "P000003",
+    "name": "Suresh Patil",
+    "age": 58,
+    "gender": "Male",
+    "phone": "9876543212",
+    "email": "suresh.patil@email.com",
+    "blood_group": "B+",
+    "address": "789 Indiranagar, Bangalore",
+    "created_at": "2024-12-01T12:00:00Z"
+  }
+]
