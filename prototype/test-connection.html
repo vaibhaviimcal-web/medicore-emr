@@ -24,7 +24,7 @@
     </style>
 </head>
 <body>
-    <h1>🔍 Supabase Connection Test v2</h1>
+    <h1>🔍 Supabase Connection Test v3</h1>
     
     <div class="test">
         <h3>Configuration:</h3>
@@ -48,12 +48,12 @@
     
     <script>
         const SUPABASE_URL = 'https://admsbebpvpnqcycrydxy.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkbXNiZWJwdnBucWN5Y3J5ZHh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMwODQ1NTgsImV4cCI6MjA0ODY2MDU1OH0.Ql-Ks_Ry_Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0';
+        const SUPABASE_KEY = 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu';
         
         document.getElementById('config').innerHTML = `
             <div class="info">URL: ${SUPABASE_URL}</div>
-            <div class="info">Key: ${SUPABASE_KEY.substring(0, 50)}...</div>
-            <div class="info">CDN: unpkg.com (changed from jsdelivr)</div>
+            <div class="info">Key: ${SUPABASE_KEY}</div>
+            <div class="success">✅ Using NEW format publishable key!</div>
         `;
         
         async function testConnection() {
@@ -66,7 +66,7 @@
                 }
                 
                 // Test 1: Create client
-                const supabase = window.supabase.createClient(SUPABASE_URL, 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu');
+                const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
                 document.getElementById('connection').innerHTML += '<div class="success">✅ Supabase client created</div>';
                 
                 // Test 2: Simple query
@@ -88,6 +88,9 @@
                     document.getElementById('patients').innerHTML += `<div class="success">Found ${count} patients</div>`;
                     if (data && data.length > 0) {
                         document.getElementById('patients').innerHTML += `<div class="info">First patient: ${data[0].name}</div>`;
+                        data.forEach((p, i) => {
+                            document.getElementById('patients').innerHTML += `<div class="info">${i+1}. ${p.name} - ${p.age}y - ${p.phone}</div>`;
+                        });
                     }
                 }
                 
