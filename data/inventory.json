@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "medicine_name": "Paracetamol 500mg",
+    "generic_name": "Acetaminophen",
+    "quantity": 500,
+    "unit": "tablets",
+    "price": 2.5,
+    "reorder_level": 100,
+    "expiry_date": "2025-12-31",
+    "created_at": "2024-12-01T10:00:00Z"
+  },
+  {
+    "id": "2",
+    "medicine_name": "Amoxicillin 250mg",
+    "generic_name": "Amoxicillin",
+    "quantity": 200,
+    "unit": "capsules",
+    "price": 5.0,
+    "reorder_level": 50,
+    "expiry_date": "2025-06-30",
+    "created_at": "2024-12-01T10:00:00Z"
+  },
+  {
+    "id": "3",
+    "medicine_name": "Ibuprofen 400mg",
+    "generic_name": "Ibuprofen",
+    "quantity": 30,
+    "unit": "tablets",
+    "price": 3.0,
+    "reorder_level": 100,
+    "expiry_date": "2025-09-30",
+    "created_at": "2024-12-01T10:00:00Z"
+  }
+]
