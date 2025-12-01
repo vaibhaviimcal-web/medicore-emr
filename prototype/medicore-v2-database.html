@@ -358,15 +358,11 @@
     </div>
     
     <script>
-        // Initialize Supabase with SERVICE ROLE KEY for full access
-        const SUPABASE_URL = 'https://medicore-emr-clinic.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZGljb3JlLWVtci1jbGluaWMiLCJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNzMzMDg0NTU4LCJleHAiOjIwNDg2NjA1NTh9.SERVICE_ROLE_KEY_HERE';
+        // CORRECT Supabase configuration
+        const SUPABASE_URL = 'https://admsbebpvpnqcycrydxy.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkbXNiZWJwdnBucWN5Y3J5ZHh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMwODQ1NTgsImV4cCI6MjA0ODY2MDU1OH0.Ql-Ks_Ry_Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0';
         
-        // For now, let's use a direct fetch approach
-        const supabaseUrl = 'https://medicore-emr-clinic.supabase.co';
-        const supabaseKey = 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu';
-        
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        const supabase = window.supabase.createClient(SUPABASE_URL, 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu');
         
         // Show alert
         function showAlert(message, type = 'success') {
@@ -381,28 +377,26 @@
         // Load dashboard stats
         async function loadStats() {
             try {
-                console.log('Loading stats...');
+                console.log('Loading stats from:', SUPABASE_URL);
                 
-                const { data: patients, error: pError } = await supabase
+                const { count: pCount, error: pError } = await supabase
                     .from('patients')
-                    .select('id', { count: 'exact', head: true });
+                    .select('*', { count: 'exact', head: true });
                 
                 if (pError) {
                     console.error('Patients error:', pError);
-                    showAlert('Error loading patients: ' + pError.message, 'danger');
                 } else {
-                    const count = patients || 0;
-                    document.getElementById('stat-patients').textContent = count;
+                    document.getElementById('stat-patients').textContent = pCount || 0;
                 }
                 
                 const today = new Date().toISOString().split('T')[0];
-                const { data: appointments, error: aError } = await supabase
+                const { count: aCount, error: aError } = await supabase
                     .from('appointments')
-                    .select('id', { count: 'exact', head: true })
+                    .select('*', { count: 'exact', head: true })
                     .eq('appointment_date', today);
                 
                 if (!aError) {
-                    document.getElementById('stat-appointments').textContent = appointments || 0;
+                    document.getElementById('stat-appointments').textContent = aCount || 0;
                 }
                 
                 const { data: inventory, error: iError } = await supabase
@@ -414,17 +408,17 @@
                     document.getElementById('stat-inventory').textContent = lowStock;
                 }
                 
-                const { data: billing, error: bError } = await supabase
+                const { count: bCount, error: bError } = await supabase
                     .from('billing')
-                    .select('id', { count: 'exact', head: true })
+                    .select('*', { count: 'exact', head: true })
                     .eq('payment_status', 'pending');
                 
                 if (!bError) {
-                    document.getElementById('stat-billing').textContent = billing || 0;
+                    document.getElementById('stat-billing').textContent = bCount || 0;
                 }
             } catch (error) {
                 console.error('Error loading stats:', error);
-                showAlert('Connection error. Check console for details.', 'danger');
+                showAlert('Connection error: ' + error.message, 'danger');
             }
         }
         
@@ -441,9 +435,7 @@
                 console.log('Patients data:', data);
                 console.log('Patients error:', error);
                 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
                 
                 const container = document.getElementById('patients-list');
                 if (!data || data.length === 0) {
@@ -650,8 +642,8 @@
         
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
-            console.log('Initializing MediCore v2...');
-            console.log('Supabase URL:', supabaseUrl);
+            console.log('🚀 Initializing MediCore v2...');
+            console.log('📡 Supabase URL:', SUPABASE_URL);
             refreshDashboard();
         });
         
