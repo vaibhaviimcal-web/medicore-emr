@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 40px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .test {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            background: #000;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #00aaff; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Supabase Connection Test</h1>
+    
+    <div class="test">
+        <h3>Configuration:</h3>
+        <div id="config"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Connection Test:</h3>
+        <div id="connection"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Patients Query:</h3>
+        <div id="patients"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Raw Response:</h3>
+        <pre id="raw"></pre>
+    </div>
+    
+    <script>
+        const SUPABASE_URL = 'https://admsbebpvpnqcycrydxy.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkbXNiZWJwdnBucWN5Y3J5ZHh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMwODQ1NTgsImV4cCI6MjA0ODY2MDU1OH0.Ql-Ks_Ry_Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0';
+        
+        document.getElementById('config').innerHTML = `
+            <div class="info">URL: ${SUPABASE_URL}</div>
+            <div class="info">Key: ${SUPABASE_KEY.substring(0, 50)}...</div>
+        `;
+        
+        async function testConnection() {
+            try {
+                document.getElementById('connection').innerHTML = '<div class="info">⏳ Testing connection...</div>';
+                
+                // Test 1: Create client
+                const supabase = window.supabase.createClient(SUPABASE_URL, 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu');
+                document.getElementById('connection').innerHTML += '<div class="success">✅ Supabase client created</div>';
+                
+                // Test 2: Simple query
+                document.getElementById('patients').innerHTML = '<div class="info">⏳ Querying patients table...</div>';
+                
+                const { data, error, count } = await supabase
+                    .from('patients')
+                    .select('*', { count: 'exact' });
+                
+                document.getElementById('raw').textContent = JSON.stringify({ data, error, count }, null, 2);
+                
+                if (error) {
+                    document.getElementById('patients').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+                    document.getElementById('patients').innerHTML += `<div class="error">Code: ${error.code}</div>`;
+                    document.getElementById('patients').innerHTML += `<div class="error">Details: ${error.details}</div>`;
+                    document.getElementById('patients').innerHTML += `<div class="error">Hint: ${error.hint}</div>`;
+                } else {
+                    document.getElementById('patients').innerHTML = `<div class="success">✅ Query successful!</div>`;
+                    document.getElementById('patients').innerHTML += `<div class="success">Found ${count} patients</div>`;
+                    if (data && data.length > 0) {
+                        document.getElementById('patients').innerHTML += `<div class="info">First patient: ${data[0].name}</div>`;
+                    }
+                }
+                
+            } catch (err) {
+                document.getElementById('connection').innerHTML += `<div class="error">❌ Connection failed: ${err.message}</div>`;
+                document.getElementById('raw').textContent = err.stack;
+            }
+        }
+        
+        // Run test on load
+        window.addEventListener('DOMContentLoaded', testConnection);
+    </script>
+</body>
+</html>
