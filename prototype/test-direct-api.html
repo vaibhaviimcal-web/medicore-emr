@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct API Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 40px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .test {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #333;
+            background: #000;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #00aaff; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Direct Supabase API Test (No Library)</h1>
+    
+    <div class="test">
+        <h3>Configuration:</h3>
+        <div id="config"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Direct Fetch Test:</h3>
+        <div id="fetch-test"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Patients Query:</h3>
+        <div id="patients"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Raw Response:</h3>
+        <pre id="raw"></pre>
+    </div>
+    
+    <script>
+        const SUPABASE_URL = 'https://admsbebpvpnqcycrydxy.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu';
+        
+        document.getElementById('config').innerHTML = `
+            <div class="info">URL: ${SUPABASE_URL}</div>
+            <div class="info">Key: ${SUPABASE_KEY}</div>
+            <div class="success">✅ Using direct fetch (no Supabase JS)</div>
+        `;
+        
+        async function testDirectAPI() {
+            try {
+                document.getElementById('fetch-test').innerHTML = '<div class="info">⏳ Testing direct API call...</div>';
+                
+                // Direct fetch to Supabase REST API
+                const url = `${SUPABASE_URL}/rest/v1/patients?select=*`;
+                
+                document.getElementById('fetch-test').innerHTML += `<div class="info">Fetching: ${url}</div>`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    }
+                });
+                
+                document.getElementById('fetch-test').innerHTML += `<div class="success">✅ Fetch completed! Status: ${response.status}</div>`;
+                
+                const data = await response.json();
+                
+                document.getElementById('raw').textContent = JSON.stringify(data, null, 2);
+                
+                if (!response.ok) {
+                    document.getElementById('patients').innerHTML = `<div class="error">❌ Error: ${response.status} ${response.statusText}</div>`;
+                    document.getElementById('patients').innerHTML += `<div class="error">Message: ${data.message || 'Unknown error'}</div>`;
+                } else {
+                    document.getElementById('patients').innerHTML = `<div class="success">✅ Query successful!</div>`;
+                    document.getElementById('patients').innerHTML += `<div class="success">Found ${data.length} patients</div>`;
+                    if (data && data.length > 0) {
+                        data.forEach((p, i) => {
+                            document.getElementById('patients').innerHTML += `<div class="info">${i+1}. ${p.name} - ${p.age}y - ${p.phone}</div>`;
+                        });
+                    }
+                }
+                
+            } catch (err) {
+                document.getElementById('fetch-test').innerHTML += `<div class="error">❌ Fetch failed: ${err.message}</div>`;
+                document.getElementById('raw').textContent = err.stack;
+            }
+        }
+        
+        // Run test on load
+        window.addEventListener('DOMContentLoaded', testDirectAPI);
+    </script>
+</body>
+</html>
