@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MediCore EMR Pro - Comprehensive Medical Records</title>
+    <title>MediCore Pro - Dr. Prakash's Clinic</title>
     <style>
         /* Professional Medical UI Design - Mobile First */
         :root {
-            --primary-color: #0066cc;
-            --primary-dark: #004c99;
-            --primary-light: #e6f2ff;
+            --primary-color: #4a5fc1;
+            --primary-dark: #3d4fa3;
+            --primary-light: #e8eaf6;
             --secondary-color: #2c3e50;
             --success-color: #00b894;
             --danger-color: #d63031;
@@ -139,13 +139,13 @@
             flex-direction: column;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
-            width: 320px;
+            width: 280px;
             flex-shrink: 0;
             transition: transform 0.3s ease;
         }
 
         .sidebar-header {
-            padding: var(--spacing-xl) var(--spacing-lg);
+            padding: var(--spacing-lg);
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -155,23 +155,22 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-sm);
         }
 
         .logo-icon {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: var(--border-radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             box-shadow: var(--shadow-md);
         }
 
         .sidebar-header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: white;
             margin-bottom: 2px;
@@ -179,7 +178,7 @@
         }
 
         .sidebar-header p {
-            font-size: 13px;
+            font-size: 12px;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
         }
@@ -187,7 +186,7 @@
         .sidebar-content {
             flex: 1;
             overflow-y: auto;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-md);
         }
 
         .sidebar-content::-webkit-scrollbar {
@@ -201,6 +200,40 @@
         .sidebar-content::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.2);
             border-radius: 3px;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .nav-btn {
+            width: 100%;
+            min-height: var(--touch-target);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-xs);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            text-align: left;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: var(--shadow-md);
         }
 
         /* Main Content */
@@ -370,7 +403,7 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: var(--spacing-md);
             margin-bottom: var(--spacing-xl);
         }
@@ -399,7 +432,7 @@
         }
 
         .stats-card p {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             line-height: 1;
         }
@@ -443,7 +476,7 @@
 
         .patient-list-item {
             padding: var(--spacing-md);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -451,94 +484,34 @@
             align-items: center;
             border-radius: var(--border-radius-sm);
             margin-bottom: var(--spacing-xs);
+            color: white;
         }
 
         .patient-list-item:hover {
-            background: var(--primary-light);
+            background: rgba(255, 255, 255, 0.1);
             transform: translateX(4px);
         }
 
-        .patient-list-item:active {
-            background: #cce5ff;
-        }
-
         .patient-info h3 {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             margin-bottom: 4px;
-            color: var(--text-primary);
+            color: white;
         }
 
         .patient-info p {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* Quick Select Buttons */
-        .quick-select-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: var(--spacing-sm);
-            margin: var(--spacing-md) 0;
-        }
-
-        .quick-select-btn {
-            min-height: 60px;
-            padding: var(--spacing-sm);
-            font-size: 14px;
-            font-weight: 600;
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius-sm);
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .quick-select-btn:hover {
-            border-color: var(--primary-color);
-            background: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .quick-select-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Form Grid */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-md);
-        }
-
-        .form-grid-3 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-md);
-        }
-
-        .form-grid-4 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-md);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         /* Search Box */
         .search-box {
             position: relative;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
         }
 
         .search-box input {
-            padding-left: 48px;
+            padding-left: 40px;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             color: white;
@@ -559,16 +532,16 @@
             left: var(--spacing-md);
             top: 50%;
             transform: translateY(-50%);
-            font-size: 18px;
+            font-size: 16px;
             color: rgba(255, 255, 255, 0.6);
         }
 
         /* Badge */
         .badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
@@ -591,6 +564,76 @@
         .badge-warning {
             background: #fff4e0;
             color: #e17055;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: var(--spacing-md);
+            border-left: 4px solid;
+        }
+
+        .alert-danger {
+            background: #ffe5e5;
+            border-left-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .alert-warning {
+            background: #fff4e0;
+            border-left-color: var(--warning-color);
+            color: #e17055;
+        }
+
+        .alert-info {
+            background: #e8f4fd;
+            border-left-color: var(--info-color);
+            color: #0984e3;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .quick-action-btn {
+            min-height: 80px;
+            padding: var(--spacing-sm);
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quick-action-btn .icon {
+            font-size: 24px;
         }
 
         /* Mobile Responsive */
@@ -642,12 +685,7 @@
                 font-size: 18px;
             }
 
-            .btn-lg {
-                min-height: 48px;
-                font-size: 16px;
-            }
-
-            .quick-select-grid {
+            .quick-actions {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -658,55 +696,18 @@
                 gap: var(--spacing-lg);
             }
 
-            .form-grid-3 {
-                grid-template-columns: repeat(3, 1fr);
-                gap: var(--spacing-lg);
-            }
-
-            .form-grid-4 {
-                grid-template-columns: repeat(4, 1fr);
-                gap: var(--spacing-lg);
-            }
-
-            .quick-select-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
-            }
-
-            .card {
-                padding: var(--spacing-xl);
-            }
-
-            .stats-card {
-                padding: var(--spacing-xl);
-            }
-
-            .stats-card p {
-                font-size: 36px;
             }
         }
 
         @media (max-width: 480px) {
-            :root {
-                --spacing-xl: 20px;
-                --spacing-lg: 16px;
-            }
-
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .quick-select-grid {
+            .quick-actions {
                 grid-template-columns: 1fr;
-            }
-
-            .patient-list-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--spacing-sm);
             }
         }
 
@@ -724,7 +725,7 @@
             <span></span>
             <span></span>
         </button>
-        <div class="mobile-header-title">MediCore EMR</div>
+        <div class="mobile-header-title">MediCore Pro</div>
         <div style="width: 44px;"></div>
     </div>
 
@@ -738,8 +739,8 @@
                 <div class="logo-container">
                     <div class="logo-icon">🏥</div>
                     <div>
-                        <h1>MediCore</h1>
-                        <p>EMR Professional</p>
+                        <h1>MediCore Pro</h1>
+                        <p>Dr. Prakash's Clinic</p>
                     </div>
                 </div>
             </div>
@@ -751,35 +752,49 @@
                     <input type="text" class="input-field" placeholder="Search patients..." id="searchInput">
                 </div>
 
-                <!-- Quick Actions -->
-                <div style="margin-bottom: var(--spacing-xl);">
-                    <button class="btn btn-primary btn-block btn-lg" onclick="showSection('newPatient')">
-                        ➕ New Patient
+                <!-- New Patient Button -->
+                <button class="btn btn-primary btn-block btn-lg" onclick="showSection('newPatient')" style="margin-bottom: var(--spacing-lg);">
+                    ➕ New Patient
+                </button>
+
+                <!-- Navigation Menu -->
+                <div class="nav-menu">
+                    <button class="nav-btn active" onclick="showSection('dashboard')">
+                        🏠 Dashboard
+                    </button>
+                    <button class="nav-btn" onclick="showSection('appointments')">
+                        📅 Appointments
+                    </button>
+                    <button class="nav-btn" onclick="showSection('inventory')">
+                        📦 Inventory
+                    </button>
+                    <button class="nav-btn" onclick="showSection('reports')">
+                        📊 Reports
                     </button>
                 </div>
 
                 <!-- Recent Patients -->
                 <div>
-                    <h3 style="color: white; margin-bottom: var(--spacing-md); font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Recent Patients</h3>
+                    <h3 style="color: rgba(255,255,255,0.9); margin-bottom: var(--spacing-sm); font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Recent Patients</h3>
                     <ul class="patient-list" id="patientList">
-                        <li class="patient-list-item" onclick="showSection('patientDetails', 'Rajesh Kumar')">
+                        <li class="patient-list-item" onclick="showSection('patientDetails', 'Ramesh Kumar')">
                             <div class="patient-info">
-                                <h3>Rajesh Kumar</h3>
-                                <p>ID: P001 • Age: 45</p>
+                                <h3>Ramesh Kumar</h3>
+                                <p>42y • Male</p>
                             </div>
                             <span class="badge badge-success">Active</span>
                         </li>
                         <li class="patient-list-item" onclick="showSection('patientDetails', 'Priya Sharma')">
                             <div class="patient-info">
                                 <h3>Priya Sharma</h3>
-                                <p>ID: P002 • Age: 32</p>
+                                <p>35y • Female</p>
                             </div>
                             <span class="badge badge-primary">Follow-up</span>
                         </li>
-                        <li class="patient-list-item" onclick="showSection('patientDetails', 'Amit Patel')">
+                        <li class="patient-list-item" onclick="showSection('patientDetails', 'Suresh Patil')">
                             <div class="patient-info">
-                                <h3>Amit Patel</h3>
-                                <p>ID: P003 • Age: 58</p>
+                                <h3>Suresh Patil</h3>
+                                <p>58y • Male</p>
                             </div>
                             <span class="badge badge-warning">Pending</span>
                         </li>
@@ -792,50 +807,136 @@
         <main class="main-content" id="mainContent">
             <!-- Dashboard Section -->
             <div id="dashboard">
-                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📊 Dashboard</h2>
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📊 Dashboard Overview</h2>
 
                 <!-- Stats Grid -->
                 <div class="stats-grid">
                     <div class="stats-card primary">
-                        <h3>Total Patients</h3>
-                        <p>1,247</p>
+                        <h3>Today's Patients</h3>
+                        <p>8</p>
                     </div>
                     <div class="stats-card warning">
-                        <h3>Today's Visits</h3>
-                        <p>23</p>
+                        <h3>Appointments</h3>
+                        <p>12</p>
                     </div>
                     <div class="stats-card success">
-                        <h3>Completed</h3>
-                        <p>18</p>
+                        <h3>Collection</h3>
+                        <p>₹4,500</p>
                     </div>
                     <div class="stats-card info">
-                        <h3>Pending</h3>
-                        <p>5</p>
+                        <h3>Total Patients</h3>
+                        <p>3</p>
                     </div>
                 </div>
 
-                <!-- Quick Actions Card -->
+                <!-- Today's Appointments -->
                 <div class="card">
-                    <div class="card-header">⚡ Quick Actions</div>
-                    <div class="quick-select-grid">
-                        <button class="quick-select-btn" onclick="showSection('newPatient')">
-                            ➕<br>New Patient
-                        </button>
-                        <button class="quick-select-btn" onclick="showSection('newVisit')">
-                            🩺<br>New Visit
-                        </button>
-                        <button class="quick-select-btn" onclick="showSection('newPrescription')">
-                            💊<br>Prescription
-                        </button>
-                        <button class="quick-select-btn" onclick="showSection('billing')">
-                            💰<br>Billing
-                        </button>
-                        <button class="quick-select-btn" onclick="showSection('reports')">
-                            📊<br>Reports
-                        </button>
-                        <button class="quick-select-btn" onclick="showSection('settings')">
-                            ⚙️<br>Settings
-                        </button>
+                    <div class="card-header">📅 Today's Appointments</div>
+                    <div style="border-left: 4px solid var(--primary-color); padding: var(--spacing-md); background: var(--bg-color); border-radius: var(--border-radius-sm); margin-bottom: var(--spacing-md);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Ramesh Kumar</h3>
+                                <p style="font-size: 14px; color: var(--text-secondary);">10:00 AM - Follow-up</p>
+                            </div>
+                            <span class="badge badge-success">Confirmed</span>
+                        </div>
+                    </div>
+                    <div style="border-left: 4px solid var(--warning-color); padding: var(--spacing-md); background: var(--bg-color); border-radius: var(--border-radius-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Priya Sharma</h3>
+                                <p style="font-size: 14px; color: var(--text-secondary);">11:30 AM - Consultation</p>
+                            </div>
+                            <span class="badge badge-warning">Pending</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Critical Alerts -->
+                <div class="card">
+                    <div class="card-header">⚠️ Critical Alerts</div>
+                    <div class="alert alert-danger">
+                        <strong>Low Stock Alert:</strong> Paracetamol (50 tablets left)
+                    </div>
+                    <div class="alert alert-warning">
+                        <strong>Follow-up Due:</strong> 3 patients need follow-up today
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Lab Results:</strong> 2 lab reports pending review
+                    </div>
+                </div>
+
+                <!-- Recent Patients -->
+                <div class="card">
+                    <div class="card-header">👥 Recent Patients</div>
+                    <div style="border-bottom: 1px solid var(--border-color); padding: var(--spacing-md) 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Ramesh Kumar</h3>
+                            <p style="font-size: 14px; color: var(--text-secondary);">45 years • Male • 9876543210</p>
+                        </div>
+                        <span class="badge badge-primary">P000001</span>
+                    </div>
+                    <div style="border-bottom: 1px solid var(--border-color); padding: var(--spacing-md) 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Priya Sharma</h3>
+                            <p style="font-size: 14px; color: var(--text-secondary);">32 years • Female • 9876543211</p>
+                        </div>
+                        <span class="badge badge-primary">P000002</span>
+                    </div>
+                    <div style="padding: var(--spacing-md) 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Suresh Patil</h3>
+                            <p style="font-size: 14px; color: var(--text-secondary);">58 years • Male • 9876543212</p>
+                        </div>
+                        <span class="badge badge-primary">P000003</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments Section -->
+            <div id="appointments" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📅 Appointments</h2>
+                <div class="card">
+                    <div class="card-header">Schedule Management</div>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">Manage patient appointments and scheduling</p>
+                    <button class="btn btn-primary">➕ New Appointment</button>
+                </div>
+            </div>
+
+            <!-- Inventory Section -->
+            <div id="inventory" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📦 Inventory</h2>
+                <div class="card">
+                    <div class="card-header">Medicine Stock</div>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">Track and manage medicine inventory</p>
+                    <button class="btn btn-primary">➕ Add Medicine</button>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📊 Reports</h2>
+                <div class="card">
+                    <div class="card-header">📈 Generate Reports</div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Report Type</label>
+                            <select class="input-field">
+                                <option>Daily Summary</option>
+                                <option>Weekly Summary</option>
+                                <option>Monthly Summary</option>
+                                <option>Patient List</option>
+                                <option>Revenue Report</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Date Range</label>
+                            <input type="date" class="input-field">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">📊 Generate</button>
+                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">📥 Export</button>
                     </div>
                 </div>
             </div>
@@ -843,21 +944,16 @@
             <!-- New Patient Section -->
             <div id="newPatient" class="hidden">
                 <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">➕ New Patient Registration</h2>
-
                 <div class="card">
                     <div class="card-header">👤 Personal Information</div>
                     <div class="form-grid">
                         <div class="input-group">
-                            <label class="input-label">First Name *</label>
-                            <input type="text" class="input-field" placeholder="Enter first name">
+                            <label class="input-label">Full Name *</label>
+                            <input type="text" class="input-field" placeholder="Enter full name">
                         </div>
                         <div class="input-group">
-                            <label class="input-label">Last Name *</label>
-                            <input type="text" class="input-field" placeholder="Enter last name">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Date of Birth *</label>
-                            <input type="date" class="input-field">
+                            <label class="input-label">Age *</label>
+                            <input type="number" class="input-field" placeholder="Enter age">
                         </div>
                         <div class="input-group">
                             <label class="input-label">Gender *</label>
@@ -871,38 +967,12 @@
                             <label class="input-label">Phone Number *</label>
                             <input type="tel" class="input-field" placeholder="+91 98765 43210">
                         </div>
-                        <div class="input-group">
-                            <label class="input-label">Email</label>
-                            <input type="email" class="input-field" placeholder="patient@example.com">
-                        </div>
                     </div>
-
                     <div class="input-group">
                         <label class="input-label">Address</label>
                         <textarea class="input-field" rows="3" placeholder="Enter complete address"></textarea>
                     </div>
-
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label class="input-label">Blood Group</label>
-                            <select class="input-field">
-                                <option>A+</option>
-                                <option>A-</option>
-                                <option>B+</option>
-                                <option>B-</option>
-                                <option>O+</option>
-                                <option>O-</option>
-                                <option>AB+</option>
-                                <option>AB-</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Emergency Contact</label>
-                            <input type="tel" class="input-field" placeholder="+91 98765 43210">
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                    <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
                         <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Patient</button>
                         <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
                     </div>
@@ -912,249 +982,50 @@
             <!-- Patient Details Section -->
             <div id="patientDetails" class="hidden">
                 <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);" id="patientName">👤 Patient Details</h2>
-
+                
                 <div class="card">
                     <div class="card-header">📋 Patient Information</div>
-                    <div class="form-grid">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
                         <div>
-                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Patient ID</p>
-                            <p style="font-size: 18px; font-weight: 600;">P001</p>
-                        </div>
-                        <div>
-                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Age / Gender</p>
-                            <p style="font-size: 18px; font-weight: 600;">45 Years / Male</p>
+                            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Patient ID</p>
+                            <p style="font-size: 16px; font-weight: 600;">P000001</p>
                         </div>
                         <div>
-                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Blood Group</p>
-                            <p style="font-size: 18px; font-weight: 600;">O+</p>
+                            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Age / Gender</p>
+                            <p style="font-size: 16px; font-weight: 600;">45 years / Male</p>
                         </div>
                         <div>
-                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Phone</p>
-                            <p style="font-size: 18px; font-weight: 600;">+91 98765 43210</p>
+                            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Phone</p>
+                            <p style="font-size: 16px; font-weight: 600;">9876543210</p>
+                        </div>
+                        <div>
+                            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Last Visit</p>
+                            <p style="font-size: 16px; font-weight: 600;">Today</p>
                         </div>
                     </div>
-
-                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
-                        <button class="btn btn-primary" style="flex: 1; min-width: 120px;">🩺 New Visit</button>
-                        <button class="btn btn-info" style="flex: 1; min-width: 120px;">💊 Prescribe</button>
-                        <button class="btn btn-warning" style="flex: 1; min-width: 120px;">💰 Bill</button>
-                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 120px;">⬅️ Back</button>
-                    </div>
                 </div>
-            </div>
 
-            <!-- New Visit Section -->
-            <div id="newVisit" class="hidden">
-                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">🩺 New Visit</h2>
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="alert('New Visit')">
+                        <span class="icon">🩺</span>
+                        <span>New Visit</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="alert('Prescription')">
+                        <span class="icon">💊</span>
+                        <span>Prescription</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="alert('Billing')">
+                        <span class="icon">💰</span>
+                        <span>Billing</span>
+                    </button>
+                </div>
 
                 <div class="card">
-                    <div class="card-header">📝 Visit Details</div>
-                    
-                    <div class="input-group">
-                        <label class="input-label">Chief Complaint *</label>
-                        <textarea class="input-field" rows="3" placeholder="Enter patient's main complaint"></textarea>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">History of Present Illness</label>
-                        <textarea class="input-field" rows="4" placeholder="Detailed history of current illness"></textarea>
-                    </div>
-
-                    <div class="form-grid-4">
-                        <div class="input-group">
-                            <label class="input-label">BP (mmHg)</label>
-                            <input type="text" class="input-field" placeholder="120/80">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Pulse (bpm)</label>
-                            <input type="number" class="input-field" placeholder="72">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Temp (°F)</label>
-                            <input type="number" class="input-field" placeholder="98.6">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Weight (kg)</label>
-                            <input type="number" class="input-field" placeholder="70">
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Examination Findings</label>
-                        <textarea class="input-field" rows="4" placeholder="Physical examination findings"></textarea>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Diagnosis</label>
-                        <textarea class="input-field" rows="3" placeholder="Enter diagnosis"></textarea>
-                    </div>
-
-                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
-                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Visit</button>
-                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">💊 Add Prescription</button>
-                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
-                    </div>
+                    <div class="card-header">📝 Visit History</div>
+                    <p style="color: var(--text-secondary);">No previous visits recorded</p>
                 </div>
-            </div>
 
-            <!-- New Prescription Section -->
-            <div id="newPrescription" class="hidden">
-                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">💊 New Prescription</h2>
-
-                <div class="card">
-                    <div class="card-header">💊 Medication Details</div>
-                    
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label class="input-label">Medicine Name *</label>
-                            <input type="text" class="input-field" placeholder="Enter medicine name">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Dosage *</label>
-                            <input type="text" class="input-field" placeholder="e.g., 500mg">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Frequency *</label>
-                            <select class="input-field">
-                                <option>Once daily</option>
-                                <option>Twice daily</option>
-                                <option>Three times daily</option>
-                                <option>Four times daily</option>
-                                <option>As needed</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Duration *</label>
-                            <input type="text" class="input-field" placeholder="e.g., 7 days">
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Instructions</label>
-                        <textarea class="input-field" rows="2" placeholder="Special instructions for the patient"></textarea>
-                    </div>
-
-                    <button class="btn btn-info btn-block">➕ Add Medicine</button>
-
-                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
-                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Prescription</button>
-                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">🖨️ Print</button>
-                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Billing Section -->
-            <div id="billing" class="hidden">
-                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">💰 Billing</h2>
-
-                <div class="card">
-                    <div class="card-header">🧾 Bill Details</div>
-                    
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label class="input-label">Service/Item *</label>
-                            <input type="text" class="input-field" placeholder="Enter service or item">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Amount (₹) *</label>
-                            <input type="number" class="input-field" placeholder="0.00">
-                        </div>
-                    </div>
-
-                    <button class="btn btn-info btn-block">➕ Add Item</button>
-
-                    <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: var(--bg-color); border-radius: var(--border-radius-sm);">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
-                            <span style="font-weight: 600;">Subtotal:</span>
-                            <span style="font-weight: 600;">₹ 0.00</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
-                            <span style="font-weight: 600;">Tax (18%):</span>
-                            <span style="font-weight: 600;">₹ 0.00</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; padding-top: var(--spacing-sm); border-top: 2px solid var(--border-color);">
-                            <span style="font-size: 20px; font-weight: 700;">Total:</span>
-                            <span style="font-size: 20px; font-weight: 700; color: var(--primary-color);">₹ 0.00</span>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
-                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Bill</button>
-                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">🖨️ Print</button>
-                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reports Section -->
-            <div id="reports" class="hidden">
-                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📊 Reports</h2>
-
-                <div class="card">
-                    <div class="card-header">📈 Generate Reports</div>
-                    
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label class="input-label">Report Type *</label>
-                            <select class="input-field">
-                                <option>Daily Summary</option>
-                                <option>Weekly Summary</option>
-                                <option>Monthly Summary</option>
-                                <option>Patient List</option>
-                                <option>Revenue Report</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Date Range *</label>
-                            <input type="date" class="input-field">
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
-                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">📊 Generate</button>
-                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">📥 Export</button>
-                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">⬅️ Back</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Settings Section -->
-            <div id="settings" class="hidden">
-                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">⚙️ Settings</h2>
-
-                <div class="card">
-                    <div class="card-header">🏥 Clinic Information</div>
-                    
-                    <div class="form-grid">
-                        <div class="input-group">
-                            <label class="input-label">Clinic Name *</label>
-                            <input type="text" class="input-field" placeholder="Enter clinic name">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Doctor Name *</label>
-                            <input type="text" class="input-field" placeholder="Dr. Name">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Specialization</label>
-                            <input type="text" class="input-field" placeholder="e.g., Internal Medicine">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Phone Number *</label>
-                            <input type="tel" class="input-field" placeholder="+91 98765 43210">
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Clinic Address</label>
-                        <textarea class="input-field" rows="3" placeholder="Enter complete clinic address"></textarea>
-                    </div>
-
-                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
-                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Settings</button>
-                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">⬅️ Back</button>
-                    </div>
-                </div>
+                <button class="btn btn-outline" onclick="showSection('dashboard')">⬅️ Back to Dashboard</button>
             </div>
         </main>
     </div>
@@ -1177,17 +1048,36 @@
         // Section navigation
         function showSection(sectionId, patientName = '') {
             // Hide all sections
-            const sections = ['dashboard', 'newPatient', 'patientDetails', 'newVisit', 'newPrescription', 'billing', 'reports', 'settings'];
+            const sections = ['dashboard', 'appointments', 'inventory', 'reports', 'newPatient', 'patientDetails'];
             sections.forEach(id => {
-                document.getElementById(id).classList.add('hidden');
+                const element = document.getElementById(id);
+                if (element) element.classList.add('hidden');
             });
 
             // Show selected section
-            document.getElementById(sectionId).classList.remove('hidden');
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) selectedSection.classList.remove('hidden');
 
             // Update patient name if provided
             if (patientName && sectionId === 'patientDetails') {
                 document.getElementById('patientName').textContent = `👤 ${patientName}`;
+            }
+
+            // Update active nav button
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Set active state for nav buttons
+            const navButtons = {
+                'dashboard': 0,
+                'appointments': 1,
+                'inventory': 2,
+                'reports': 3
+            };
+            
+            if (navButtons.hasOwnProperty(sectionId)) {
+                document.querySelectorAll('.nav-btn')[navButtons[sectionId]].classList.add('active');
             }
 
             // Close mobile sidebar
