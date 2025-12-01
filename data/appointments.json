@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "patient_id": "1",
+    "patient_name": "Ramesh Kumar",
+    "appointment_date": "2024-12-02",
+    "appointment_time": "10:00",
+    "type": "Consultation",
+    "status": "confirmed",
+    "notes": "Regular checkup",
+    "created_at": "2024-12-01T10:00:00Z"
+  },
+  {
+    "id": "2",
+    "patient_id": "2",
+    "patient_name": "Priya Sharma",
+    "appointment_date": "2024-12-02",
+    "appointment_time": "14:30",
+    "type": "Follow-up",
+    "status": "pending",
+    "notes": "Blood pressure monitoring",
+    "created_at": "2024-12-01T11:00:00Z"
+  }
+]
