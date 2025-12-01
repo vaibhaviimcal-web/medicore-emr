@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCore Pro v2 - Database Integrated</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>MediCore Pro v2 - Working Version</title>
     <style>
         :root {
             --primary: #4a5fc1;
@@ -239,7 +238,7 @@
     <div class="container">
         <div class="header">
             <h1>🏥 MediCore Pro v2</h1>
-            <p>Database-Integrated EMR System</p>
+            <p>✅ Now Working with JSON Storage!</p>
         </div>
         
         <div id="alert-container"></div>
@@ -259,8 +258,8 @@
                 <p id="stat-inventory">0</p>
             </div>
             <div class="stat-card">
-                <h3>Pending Bills</h3>
-                <p id="stat-billing">0</p>
+                <h3>Total Medicines</h3>
+                <p id="stat-medicines">0</p>
             </div>
         </div>
         
@@ -348,6 +347,10 @@
                     <option value="Emergency">Emergency</option>
                     <option value="Checkup">Checkup</option>
                 </select>
+                <select class="input-field" name="status">
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                </select>
                 <textarea class="input-field" name="notes" placeholder="Notes" rows="3"></textarea>
                 <div style="display: flex; gap: 10px;">
                     <button type="submit" class="btn btn-success">📅 Schedule</button>
@@ -358,11 +361,8 @@
     </div>
     
     <script>
-        // CORRECT Supabase configuration
-        const SUPABASE_URL = 'https://admsbebpvpnqcycrydxy.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkbXNiZWJwdnBucWN5Y3J5ZHh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMwODQ1NTgsImV4cCI6MjA0ODY2MDU1OH0.Ql-Ks_Ry_Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0Ql0';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu');
+        // API base URL
+        const API_BASE = '/api';
         
         // Show alert
         function showAlert(message, type = 'success') {
@@ -377,68 +377,38 @@
         // Load dashboard stats
         async function loadStats() {
             try {
-                console.log('Loading stats from:', SUPABASE_URL);
+                // Get patients count
+                const patientsRes = await fetch(`${API_BASE}/patients`);
+                const patientsData = await patientsRes.json();
+                document.getElementById('stat-patients').textContent = patientsData.count || 0;
                 
-                const { count: pCount, error: pError } = await supabase
-                    .from('patients')
-                    .select('*', { count: 'exact', head: true });
-                
-                if (pError) {
-                    console.error('Patients error:', pError);
-                } else {
-                    document.getElementById('stat-patients').textContent = pCount || 0;
-                }
-                
+                // Get today's appointments
                 const today = new Date().toISOString().split('T')[0];
-                const { count: aCount, error: aError } = await supabase
-                    .from('appointments')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('appointment_date', today);
+                const appointmentsRes = await fetch(`${API_BASE}/appointments?date=${today}`);
+                const appointmentsData = await appointmentsRes.json();
+                document.getElementById('stat-appointments').textContent = appointmentsData.count || 0;
                 
-                if (!aError) {
-                    document.getElementById('stat-appointments').textContent = aCount || 0;
-                }
+                // Get inventory
+                const inventoryRes = await fetch(`${API_BASE}/inventory`);
+                const inventoryData = await inventoryRes.json();
+                const lowStock = inventoryData.data.filter(i => i.quantity < i.reorder_level).length;
+                document.getElementById('stat-inventory').textContent = lowStock;
+                document.getElementById('stat-medicines').textContent = inventoryData.count || 0;
                 
-                const { data: inventory, error: iError } = await supabase
-                    .from('inventory')
-                    .select('id, quantity, reorder_level');
-                
-                if (!iError && inventory) {
-                    const lowStock = inventory.filter(i => i.quantity < i.reorder_level).length;
-                    document.getElementById('stat-inventory').textContent = lowStock;
-                }
-                
-                const { count: bCount, error: bError } = await supabase
-                    .from('billing')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('payment_status', 'pending');
-                
-                if (!bError) {
-                    document.getElementById('stat-billing').textContent = bCount || 0;
-                }
             } catch (error) {
                 console.error('Error loading stats:', error);
-                showAlert('Connection error: ' + error.message, 'danger');
+                showAlert('Error loading statistics', 'danger');
             }
         }
         
         // Load patients
         async function loadPatients() {
             try {
-                console.log('Loading patients...');
-                const { data, error } = await supabase
-                    .from('patients')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(10);
-                
-                console.log('Patients data:', data);
-                console.log('Patients error:', error);
-                
-                if (error) throw error;
+                const response = await fetch(`${API_BASE}/patients`);
+                const result = await response.json();
                 
                 const container = document.getElementById('patients-list');
-                if (!data || data.length === 0) {
+                if (!result.data || result.data.length === 0) {
                     container.innerHTML = '<p style="text-align: center; color: #636e72;">No patients found. Click "New Patient" to add one!</p>';
                     return;
                 }
@@ -455,7 +425,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${data.map(p => `
+                            ${result.data.map(p => `
                                 <tr>
                                     <td><strong>${p.patient_id}</strong></td>
                                     <td>${p.name}</td>
@@ -477,19 +447,11 @@
         async function loadAppointments() {
             try {
                 const today = new Date().toISOString().split('T')[0];
-                const { data, error } = await supabase
-                    .from('appointments')
-                    .select(`
-                        *,
-                        patients (name, patient_id, phone)
-                    `)
-                    .eq('appointment_date', today)
-                    .order('appointment_time', { ascending: true });
-                
-                if (error) throw error;
+                const response = await fetch(`${API_BASE}/appointments?date=${today}`);
+                const result = await response.json();
                 
                 const container = document.getElementById('appointments-list');
-                if (!data || data.length === 0) {
+                if (!result.data || result.data.length === 0) {
                     container.innerHTML = '<p style="text-align: center; color: #636e72;">No appointments today</p>';
                     return;
                 }
@@ -505,10 +467,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${data.map(a => `
+                            ${result.data.map(a => `
                                 <tr>
                                     <td><strong>${a.appointment_time}</strong></td>
-                                    <td>${a.patients.name} (${a.patients.patient_id})</td>
+                                    <td>${a.patient_name}</td>
                                     <td>${a.type}</td>
                                     <td><span class="badge badge-${a.status === 'confirmed' ? 'success' : 'warning'}">${a.status}</span></td>
                                 </tr>
@@ -525,16 +487,11 @@
         // Load inventory
         async function loadInventory() {
             try {
-                const { data, error } = await supabase
-                    .from('inventory')
-                    .select('*')
-                    .order('quantity', { ascending: true })
-                    .limit(10);
-                
-                if (error) throw error;
+                const response = await fetch(`${API_BASE}/inventory`);
+                const result = await response.json();
                 
                 const container = document.getElementById('inventory-list');
-                if (!data || data.length === 0) {
+                if (!result.data || result.data.length === 0) {
                     container.innerHTML = '<p style="text-align: center; color: #636e72;">No inventory items</p>';
                     return;
                 }
@@ -551,7 +508,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${data.map(i => {
+                            ${result.data.map(i => {
                                 const isLow = i.quantity < i.reorder_level;
                                 return `
                                     <tr>
@@ -581,10 +538,11 @@
             document.getElementById('add-appointment-modal').classList.add('active');
             
             // Load patients for dropdown
-            const { data } = await supabase.from('patients').select('id, name, patient_id').order('name');
+            const response = await fetch(`${API_BASE}/patients`);
+            const result = await response.json();
             const select = document.getElementById('appointment-patient-select');
             select.innerHTML = '<option value="">Select Patient *</option>' + 
-                (data || []).map(p => `<option value="${p.id}">${p.name} (${p.patient_id})</option>`).join('');
+                (result.data || []).map(p => `<option value="${p.id}">${p.name} (${p.patient_id})</option>`).join('');
         }
         
         function closeModal(modalId) {
@@ -598,8 +556,15 @@
             const data = Object.fromEntries(formData);
             
             try {
-                const { error } = await supabase.from('patients').insert([data]);
-                if (error) throw error;
+                const response = await fetch(`${API_BASE}/patients`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) throw new Error(result.error || 'Failed to add patient');
                 
                 showAlert('✅ Patient added successfully!', 'success');
                 closeModal('add-patient-modal');
@@ -616,11 +581,21 @@
             e.preventDefault();
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
-            data.status = 'pending';
+            
+            // Get patient name
+            const select = document.getElementById('appointment-patient-select');
+            data.patient_name = select.options[select.selectedIndex].text.split(' (')[0];
             
             try {
-                const { error } = await supabase.from('appointments').insert([data]);
-                if (error) throw error;
+                const response = await fetch(`${API_BASE}/appointments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) throw new Error(result.error || 'Failed to add appointment');
                 
                 showAlert('✅ Appointment scheduled successfully!', 'success');
                 closeModal('add-appointment-modal');
@@ -642,8 +617,7 @@
         
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 Initializing MediCore v2...');
-            console.log('📡 Supabase URL:', SUPABASE_URL);
+            console.log('🚀 Initializing MediCore v2 with JSON storage...');
             refreshDashboard();
         });
         
