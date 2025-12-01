@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MediCore EMR Pro - Comprehensive Medical Records</title>
     <style>
-        /* Professional Medical UI Design */
+        /* Professional Medical UI Design - Mobile First */
         :root {
             --primary-color: #0066cc;
             --primary-dark: #004c99;
@@ -24,7 +24,7 @@
             --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
             --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-            --touch-target: 56px;
+            --touch-target: 48px;
             --spacing-xs: 8px;
             --spacing-sm: 12px;
             --spacing-md: 16px;
@@ -51,10 +51,85 @@
         }
 
         .app-container {
-            display: grid;
-            grid-template-columns: 320px 1fr;
+            display: flex;
             height: 100vh;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            z-index: 1000;
+            padding: 0 var(--spacing-md);
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-md);
+        }
+
+        .mobile-header-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .hamburger-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .hamburger-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
         }
 
         /* Professional Sidebar */
@@ -64,6 +139,9 @@
             flex-direction: column;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
+            width: 320px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
@@ -130,6 +208,7 @@
             background: var(--bg-color);
             overflow-y: auto;
             padding: var(--spacing-xl);
+            flex: 1;
         }
 
         .main-content::-webkit-scrollbar {
@@ -148,7 +227,7 @@
         /* Professional Buttons */
         .btn {
             min-height: var(--touch-target);
-            padding: 0 var(--spacing-xl);
+            padding: 0 var(--spacing-lg);
             font-size: 16px;
             font-weight: 600;
             border: none;
@@ -213,7 +292,7 @@
         }
 
         .btn-lg {
-            min-height: 64px;
+            min-height: 56px;
             font-size: 18px;
             border-radius: var(--border-radius);
         }
@@ -226,7 +305,7 @@
 
         /* Professional Input Fields */
         .input-field {
-            min-height: 52px;
+            min-height: 48px;
             padding: var(--spacing-md) var(--spacing-lg);
             font-size: 16px;
             border: 2px solid var(--border-color);
@@ -265,7 +344,7 @@
         .card {
             background: white;
             border-radius: var(--border-radius);
-            padding: var(--spacing-xl);
+            padding: var(--spacing-lg);
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-lg);
             border: 1px solid var(--border-color);
@@ -277,7 +356,7 @@
         }
 
         .card-header {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: var(--spacing-lg);
             padding-bottom: var(--spacing-md);
@@ -291,15 +370,15 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--spacing-lg);
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--spacing-md);
             margin-bottom: var(--spacing-xl);
         }
 
         .stats-card {
             background: white;
             border-radius: var(--border-radius);
-            padding: var(--spacing-xl);
+            padding: var(--spacing-lg);
             box-shadow: var(--shadow-md);
             border-left: 4px solid var(--primary-color);
             transition: all 0.3s ease;
@@ -311,7 +390,7 @@
         }
 
         .stats-card h3 {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
             margin-bottom: var(--spacing-sm);
             text-transform: uppercase;
@@ -320,7 +399,7 @@
         }
 
         .stats-card p {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 700;
             line-height: 1;
         }
@@ -363,7 +442,7 @@
         }
 
         .patient-list-item {
-            padding: var(--spacing-lg);
+            padding: var(--spacing-md);
             border-bottom: 1px solid var(--border-color);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -384,29 +463,29 @@
         }
 
         .patient-info h3 {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 4px;
             color: var(--text-primary);
         }
 
         .patient-info p {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
         }
 
         /* Quick Select Buttons */
         .quick-select-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: var(--spacing-sm);
             margin: var(--spacing-md) 0;
         }
 
         .quick-select-btn {
-            min-height: 72px;
-            padding: var(--spacing-md);
-            font-size: 15px;
+            min-height: 60px;
+            padding: var(--spacing-sm);
+            font-size: 14px;
             font-weight: 600;
             border: 2px solid var(--border-color);
             border-radius: var(--border-radius-sm);
@@ -436,20 +515,20 @@
         /* Form Grid */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-lg);
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
         }
 
         .form-grid-3 {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--spacing-lg);
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
         }
 
         .form-grid-4 {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--spacing-lg);
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
         }
 
         /* Search Box */
@@ -459,7 +538,7 @@
         }
 
         .search-box input {
-            padding-left: 52px;
+            padding-left: 48px;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             color: white;
@@ -477,19 +556,19 @@
 
         .search-icon {
             position: absolute;
-            left: var(--spacing-lg);
+            left: var(--spacing-md);
             top: 50%;
             transform: translateY(-50%);
-            font-size: 20px;
+            font-size: 18px;
             color: rgba(255, 255, 255, 0.6);
         }
 
         /* Badge */
         .badge {
             display: inline-block;
-            padding: 6px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
@@ -500,13 +579,8 @@
         }
 
         .badge-success {
-            background: #d1fae5;
+            background: #d5f4e6;
             color: var(--success-color);
-        }
-
-        .badge-warning {
-            background: #fef3c7;
-            color: #e17055;
         }
 
         .badge-danger {
@@ -514,1746 +588,636 @@
             color: var(--danger-color);
         }
 
-        .badge-info {
-            background: #e3f2fd;
-            color: var(--info-color);
+        .badge-warning {
+            background: #fff4e0;
+            color: #e17055;
         }
 
-        /* Medicine List */
-        .medicine-item {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: var(--border-radius-sm);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-md);
-            border-left: 4px solid var(--primary-color);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .medicine-item h4 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-
-        .medicine-item p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin: 4px 0;
-        }
-
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 40px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--border-color);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: var(--spacing-xl);
-            padding: var(--spacing-lg);
-            background: white;
-            border-radius: var(--border-radius-sm);
-            box-shadow: var(--shadow-sm);
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -29px;
-            top: 24px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            border: 3px solid white;
-            box-shadow: 0 0 0 2px var(--primary-color);
-        }
-
-        .timeline-date {
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .tab {
-            padding: var(--spacing-md) var(--spacing-xl);
-            font-size: 16px;
-            font-weight: 600;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-secondary);
-        }
-
-        .tab:hover {
-            color: var(--primary-color);
-            background: var(--primary-light);
-        }
-
-        .tab.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Table */
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table th {
-            background: var(--primary-light);
-            padding: var(--spacing-md);
-            text-align: left;
-            font-weight: 600;
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .table td {
-            padding: var(--spacing-md);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .table tr:hover {
-            background: var(--primary-light);
-        }
-
-        /* Utility Classes */
-        .hidden {
-            display: none !important;
-        }
-
-        .mb-3 {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .mb-4 {
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .mt-3 {
-            margin-top: var(--spacing-lg);
-        }
-
-        .mt-4 {
-            margin-top: var(--spacing-xl);
-        }
-
-        .flex {
-            display: flex;
-        }
-
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .gap-3 {
-            gap: var(--spacing-lg);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        /* Current Patient Card */
-        #currentPatientCard {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        #currentPatientCard h3 {
-            color: white;
-        }
-
-        #currentPatientInfo p {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Billing Total Card */
-        .billing-total {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            border: none;
-            color: white;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .billing-total h3,
-        .billing-total p {
-            color: white;
-        }
-
-        /* Alert Box */
-        .alert {
-            padding: var(--spacing-lg);
-            border-radius: var(--border-radius-sm);
-            margin-bottom: var(--spacing-lg);
-            border-left: 4px solid;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            border-left-color: var(--success-color);
-            color: #065f46;
-        }
-
-        .alert-warning {
-            background: #fef3c7;
-            border-left-color: var(--warning-color);
-            color: #92400e;
-        }
-
-        .alert-danger {
-            background: #ffe5e5;
-            border-left-color: var(--danger-color);
-            color: #991b1b;
-        }
-
-        .alert-info {
-            background: #e3f2fd;
-            border-left-color: var(--info-color);
-            color: #1e40af;
-        }
-
-        /* Lab Report Card */
-        .lab-report-card {
-            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
-            border-left-color: var(--danger-color);
-        }
-
-        .lab-report-card.normal {
-            background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
-            border-left-color: var(--success-color);
-        }
-
-        /* Appointment Card */
-        .appointment-card {
-            background: white;
-            border-radius: var(--border-radius-sm);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-md);
-            box-shadow: var(--shadow-sm);
-            border-left: 4px solid var(--info-color);
-            transition: all 0.3s ease;
-        }
-
-        .appointment-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateX(4px);
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .mobile-header {
+                display: flex;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
-        .card {
-            animation: fadeIn 0.5s ease;
-        }
+            .sidebar-overlay {
+                display: block;
+            }
 
-        /* Responsive */
-        @media (min-width: 1024px) and (max-width: 1366px) {
-            .app-container {
-                grid-template-columns: 340px 1fr;
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 1001;
+                transform: translateX(-100%);
             }
-        }
 
-        @media (min-width: 834px) and (max-width: 1194px) {
-            .app-container {
-                grid-template-columns: 300px 1fr;
+            .sidebar.active {
+                transform: translateX(0);
             }
-            
-            .btn {
-                font-size: 15px;
-            }
-            
-            .input-field {
-                font-size: 15px;
+
+            .main-content {
+                padding: var(--spacing-md);
+                padding-top: calc(60px + var(--spacing-md));
             }
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-sm);
             }
+
+            .stats-card {
+                padding: var(--spacing-md);
+            }
+
+            .stats-card p {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: var(--spacing-md);
+            }
+
+            .card-header {
+                font-size: 18px;
+            }
+
+            .btn-lg {
+                min-height: 48px;
+                font-size: 16px;
+            }
+
+            .quick-select-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-lg);
+            }
+
+            .form-grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--spacing-lg);
+            }
+
+            .form-grid-4 {
+                grid-template-columns: repeat(4, 1fr);
+                gap: var(--spacing-lg);
+            }
+
+            .quick-select-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .card {
+                padding: var(--spacing-xl);
+            }
+
+            .stats-card {
+                padding: var(--spacing-xl);
+            }
+
+            .stats-card p {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --spacing-xl: 20px;
+                --spacing-lg: 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-select-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .patient-list-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
+        }
+
+        /* Hide elements */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <button class="hamburger-btn" id="hamburgerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-header-title">MediCore EMR</div>
+        <div style="width: 44px;"></div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="app-container">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-icon">⚕️</div>
+                    <div class="logo-icon">🏥</div>
                     <div>
-                        <h1>MediCore Pro</h1>
-                        <p>Dr. Prakash's Clinic</p>
+                        <h1>MediCore</h1>
+                        <p>EMR Professional</p>
                     </div>
                 </div>
             </div>
 
             <div class="sidebar-content">
-                <button class="btn btn-primary btn-block mb-3" onclick="showView('registration')">
-                    ➕ New Patient
-                </button>
-
-                <button class="btn btn-outline btn-block mb-3" onclick="showView('dashboard')" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
-                    🏠 Dashboard
-                </button>
-
-                <button class="btn btn-outline btn-block mb-3" onclick="showView('appointments')" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
-                    📅 Appointments
-                </button>
-
-                <button class="btn btn-outline btn-block mb-3" onclick="showView('inventory')" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
-                    📦 Inventory
-                </button>
-
-                <button class="btn btn-outline btn-block mb-3" onclick="showView('reports')" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
-                    📊 Reports
-                </button>
-
+                <!-- Search -->
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
-                    <input 
-                        type="text" 
-                        class="input-field" 
-                        placeholder="Search patients..."
-                        oninput="searchPatients(this.value)"
-                    >
+                    <input type="text" class="input-field" placeholder="Search patients..." id="searchInput">
                 </div>
 
-                <div id="patientList"></div>
-
-                <div id="currentPatientCard" class="card hidden">
-                    <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Current Patient</h3>
-                    <div id="currentPatientInfo"></div>
-                    <button class="btn btn-outline btn-block mt-3" onclick="showView('patientDetails')" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);">
-                        📋 Full Profile
+                <!-- Quick Actions -->
+                <div style="margin-bottom: var(--spacing-xl);">
+                    <button class="btn btn-primary btn-block btn-lg" onclick="showSection('newPatient')">
+                        ➕ New Patient
                     </button>
                 </div>
+
+                <!-- Recent Patients -->
+                <div>
+                    <h3 style="color: white; margin-bottom: var(--spacing-md); font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Recent Patients</h3>
+                    <ul class="patient-list" id="patientList">
+                        <li class="patient-list-item" onclick="showSection('patientDetails', 'Rajesh Kumar')">
+                            <div class="patient-info">
+                                <h3>Rajesh Kumar</h3>
+                                <p>ID: P001 • Age: 45</p>
+                            </div>
+                            <span class="badge badge-success">Active</span>
+                        </li>
+                        <li class="patient-list-item" onclick="showSection('patientDetails', 'Priya Sharma')">
+                            <div class="patient-info">
+                                <h3>Priya Sharma</h3>
+                                <p>ID: P002 • Age: 32</p>
+                            </div>
+                            <span class="badge badge-primary">Follow-up</span>
+                        </li>
+                        <li class="patient-list-item" onclick="showSection('patientDetails', 'Amit Patel')">
+                            <div class="patient-info">
+                                <h3>Amit Patel</h3>
+                                <p>ID: P003 • Age: 58</p>
+                            </div>
+                            <span class="badge badge-warning">Pending</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </aside>
 
         <!-- Main Content -->
-        <div class="main-content">
-            <!-- Dashboard View -->
-            <div id="dashboardView">
-                <h2 class="card-header" style="background: white; padding: var(--spacing-xl); border-radius: var(--border-radius); box-shadow: var(--shadow-md); border: none;">
-                    📊 Dashboard Overview
-                </h2>
-                
+        <main class="main-content" id="mainContent">
+            <!-- Dashboard Section -->
+            <div id="dashboard">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📊 Dashboard</h2>
+
+                <!-- Stats Grid -->
                 <div class="stats-grid">
                     <div class="stats-card primary">
-                        <h3>Today's Patients</h3>
-                        <p id="todayPatientsCount">8</p>
+                        <h3>Total Patients</h3>
+                        <p>1,247</p>
                     </div>
                     <div class="stats-card warning">
-                        <h3>Appointments</h3>
-                        <p id="appointmentsCount">12</p>
+                        <h3>Today's Visits</h3>
+                        <p>23</p>
                     </div>
                     <div class="stats-card success">
-                        <h3>Collection</h3>
-                        <p id="collectionAmount">₹4,500</p>
+                        <h3>Completed</h3>
+                        <p>18</p>
                     </div>
                     <div class="stats-card info">
-                        <h3>Total Patients</h3>
-                        <p id="totalPatientsCount">156</p>
+                        <h3>Pending</h3>
+                        <p>5</p>
                     </div>
                 </div>
 
-                <div class="form-grid mb-4">
-                    <div class="card">
-                        <h3 class="card-header">📅 Today's Appointments</h3>
-                        <div id="todayAppointments"></div>
-                    </div>
-
-                    <div class="card">
-                        <h3 class="card-header">⚠️ Critical Alerts</h3>
-                        <div class="alert alert-danger">
-                            <strong>Low Stock Alert:</strong> Paracetamol (50 tablets left)
-                        </div>
-                        <div class="alert alert-warning">
-                            <strong>Follow-up Due:</strong> 3 patients need follow-up today
-                        </div>
-                        <div class="alert alert-info">
-                            <strong>Lab Results:</strong> 2 lab reports pending review
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Quick Actions Card -->
                 <div class="card">
-                    <h3 class="card-header">👥 Recent Patients</h3>
-                    <ul class="patient-list" id="recentPatientsList"></ul>
-                </div>
-            </div>
-
-            <!-- Patient Registration View -->
-            <div id="registrationView" class="hidden">
-                <div class="card">
-                    <h2 class="card-header">➕ New Patient Registration</h2>
-                    
-                    <form onsubmit="registerPatient(event)">
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Patient Name *</label>
-                                <input type="text" class="input-field" id="patientName" required placeholder="Enter full name">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Age *</label>
-                                <input type="number" class="input-field" id="patientAge" required placeholder="Enter age" min="0" max="150">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Gender *</label>
-                                <select class="input-field" id="patientGender" required>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Phone Number *</label>
-                                <input type="tel" class="input-field" id="patientPhone" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Email Address</label>
-                                <input type="email" class="input-field" id="patientEmail" placeholder="patient@example.com (optional)">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Blood Group</label>
-                                <select class="input-field" id="patientBloodGroup">
-                                    <option value="">Select Blood Group</option>
-                                    <option value="A+">A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <label class="input-label">Address</label>
-                            <textarea class="input-field" id="patientAddress" placeholder="Enter complete address (optional)" rows="2"></textarea>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Emergency Contact Name</label>
-                                <input type="text" class="input-field" id="emergencyContactName" placeholder="Emergency contact person">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Emergency Contact Phone</label>
-                                <input type="tel" class="input-field" id="emergencyContactPhone" placeholder="Emergency contact number">
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <label class="input-label">Known Allergies</label>
-                            <textarea class="input-field" id="patientAllergies" placeholder="List any known allergies (optional)" rows="2"></textarea>
-                        </div>
-
-                        <div class="input-group">
-                            <label class="input-label">Chronic Conditions</label>
-                            <textarea class="input-field" id="patientConditions" placeholder="List any chronic conditions (optional)" rows="2"></textarea>
-                        </div>
-
-                        <div class="flex gap-3 mt-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg">✅ Register Patient</button>
-                            <button type="button" class="btn btn-outline btn-lg" onclick="showView('dashboard')">❌ Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Patient Details View -->
-            <div id="patientDetailsView" class="hidden">
-                <div class="card">
-                    <div class="flex-between mb-4">
-                        <div id="patientDetailsHeader"></div>
-                        <div class="flex gap-3">
-                            <button class="btn btn-primary" onclick="showView('casesheet')">🩺 New Visit</button>
-                            <button class="btn btn-info" onclick="showView('labOrders')">🧪 Order Lab Test</button>
-                            <button class="btn btn-success" onclick="showView('imaging')">📷 Order Imaging</button>
-                        </div>
-                    </div>
-
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchTab('overview')">📋 Overview</button>
-                        <button class="tab" onclick="switchTab('visits')">🩺 Visit History</button>
-                        <button class="tab" onclick="switchTab('labs')">🧪 Lab Reports</button>
-                        <button class="tab" onclick="switchTab('prescriptions')">💊 Prescriptions</button>
-                        <button class="tab" onclick="switchTab('documents')">📄 Documents</button>
-                    </div>
-
-                    <div id="overviewTab" class="tab-content active">
-                        <div class="form-grid mb-4">
-                            <div class="card" style="background: var(--primary-light);">
-                                <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--text-secondary);">PATIENT INFORMATION</h4>
-                                <div id="patientOverviewInfo"></div>
-                            </div>
-                            <div class="card" style="background: #fff5f5;">
-                                <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--text-secondary);">MEDICAL ALERTS</h4>
-                                <div id="patientAlerts"></div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <h3 class="card-header">📊 Vital Trends (Last 6 Months)</h3>
-                            <div style="padding: 40px; text-align: center; background: var(--bg-color); border-radius: var(--border-radius-sm);">
-                                <p style="color: var(--text-secondary);">📈 Blood Pressure: 120/80 → 125/82 → 118/78 (Stable)</p>
-                                <p style="color: var(--text-secondary);">🌡️ Temperature: Normal range maintained</p>
-                                <p style="color: var(--text-secondary);">⚖️ Weight: 72kg → 70kg → 69kg (Decreasing trend)</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="visitsTab" class="tab-content">
-                        <div class="timeline" id="visitTimeline"></div>
-                    </div>
-
-                    <div id="labsTab" class="tab-content">
-                        <div id="labReportsList"></div>
-                    </div>
-
-                    <div id="prescriptionsTab" class="tab-content">
-                        <div id="prescriptionsList"></div>
-                    </div>
-
-                    <div id="documentsTab" class="tab-content">
-                        <button class="btn btn-primary mb-3">📤 Upload Document</button>
-                        <div id="documentsList"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Case Sheet View -->
-            <div id="casesheetView" class="hidden">
-                <div class="card">
-                    <div class="flex-between mb-3">
-                        <div id="casesheetPatientInfo"></div>
-                        <span class="badge badge-success" style="font-size: 16px; padding: 10px 20px;">🆕 New Visit</span>
-                    </div>
-
-                    <form onsubmit="saveCaseSheet(event)">
-                        <!-- Chief Complaints -->
-                        <div class="input-group">
-                            <label class="input-label">🩺 Chief Complaints *</label>
-                            <div class="quick-select-grid" id="complaintsGrid"></div>
-                            <input type="text" class="input-field mt-3" id="customComplaint" placeholder="Add custom complaint...">
-                        </div>
-
-                        <!-- Vitals -->
-                        <div class="input-group">
-                            <label class="input-label">💓 Vital Signs</label>
-                            <div class="form-grid-4">
-                                <input type="text" class="input-field" id="vitalBP" placeholder="BP (e.g., 120/80)">
-                                <input type="text" class="input-field" id="vitalTemp" placeholder="Temp (°F)">
-                                <input type="text" class="input-field" id="vitalPulse" placeholder="Pulse (bpm)">
-                                <input type="text" class="input-field" id="vitalSpO2" placeholder="SpO2 (%)">
-                            </div>
-                            <div class="form-grid-3 mt-3">
-                                <input type="text" class="input-field" id="vitalWeight" placeholder="Weight (kg)">
-                                <input type="text" class="input-field" id="vitalHeight" placeholder="Height (cm)">
-                                <input type="text" class="input-field" id="vitalBMI" placeholder="BMI" readonly>
-                            </div>
-                        </div>
-
-                        <!-- History -->
-                        <div class="input-group">
-                            <label class="input-label">📝 History of Present Illness</label>
-                            <textarea class="input-field" id="history" rows="3" placeholder="Detailed history..."></textarea>
-                        </div>
-
-                        <!-- Past Medical History -->
-                        <div class="input-group">
-                            <label class="input-label">📚 Past Medical History</label>
-                            <textarea class="input-field" id="pastHistory" rows="2" placeholder="Previous illnesses, surgeries, hospitalizations..."></textarea>
-                        </div>
-
-                        <!-- Examination -->
-                        <div class="input-group">
-                            <label class="input-label">🔍 Physical Examination</label>
-                            <textarea class="input-field" id="examination" rows="3" placeholder="Examination findings..."></textarea>
-                        </div>
-
-                        <!-- Diagnosis -->
-                        <div class="input-group">
-                            <label class="input-label">🎯 Diagnosis *</label>
-                            <div class="quick-select-grid" id="diagnosisGrid"></div>
-                            <input type="text" class="input-field mt-3" id="customDiagnosis" placeholder="Add custom diagnosis...">
-                        </div>
-
-                        <!-- Investigation Orders -->
-                        <div class="input-group">
-                            <label class="input-label">🧪 Investigation Orders</label>
-                            <div class="quick-select-grid">
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('CBC')">CBC</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('Blood Sugar')">Blood Sugar</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('Lipid Profile')">Lipid Profile</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('Liver Function')">Liver Function</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('Kidney Function')">Kidney Function</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('Urine Routine')">Urine Routine</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('X-Ray Chest')">X-Ray Chest</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('ECG')">ECG</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleInvestigation('Ultrasound')">Ultrasound</button>
-                            </div>
-                        </div>
-
-                        <!-- Notes -->
-                        <div class="input-group">
-                            <label class="input-label">📌 Additional Notes</label>
-                            <textarea class="input-field" id="notes" rows="2" placeholder="Any additional notes..."></textarea>
-                        </div>
-
-                        <!-- Follow-up Date -->
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">📅 Follow-up Date</label>
-                                <input type="date" class="input-field" id="followupDate">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">⏰ Follow-up Time</label>
-                                <input type="time" class="input-field" id="followupTime">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block btn-lg mt-4">
-                            ➡️ Save & Continue to Prescription
+                    <div class="card-header">⚡ Quick Actions</div>
+                    <div class="quick-select-grid">
+                        <button class="quick-select-btn" onclick="showSection('newPatient')">
+                            ➕<br>New Patient
                         </button>
-                    </form>
+                        <button class="quick-select-btn" onclick="showSection('newVisit')">
+                            🩺<br>New Visit
+                        </button>
+                        <button class="quick-select-btn" onclick="showSection('newPrescription')">
+                            💊<br>Prescription
+                        </button>
+                        <button class="quick-select-btn" onclick="showSection('billing')">
+                            💰<br>Billing
+                        </button>
+                        <button class="quick-select-btn" onclick="showSection('reports')">
+                            📊<br>Reports
+                        </button>
+                        <button class="quick-select-btn" onclick="showSection('settings')">
+                            ⚙️<br>Settings
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Prescription View -->
-            <div id="prescriptionView" class="hidden">
+            <!-- New Patient Section -->
+            <div id="newPatient" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">➕ New Patient Registration</h2>
+
                 <div class="card">
-                    <h2 class="card-header">💊 E-Prescription</h2>
+                    <div class="card-header">👤 Personal Information</div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">First Name *</label>
+                            <input type="text" class="input-field" placeholder="Enter first name">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Last Name *</label>
+                            <input type="text" class="input-field" placeholder="Enter last name">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Date of Birth *</label>
+                            <input type="date" class="input-field">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Gender *</label>
+                            <select class="input-field">
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Phone Number *</label>
+                            <input type="tel" class="input-field" placeholder="+91 98765 43210">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Email</label>
+                            <input type="email" class="input-field" placeholder="patient@example.com">
+                        </div>
+                    </div>
 
                     <div class="input-group">
-                        <label class="input-label">Quick Select Medicines</label>
-                        <div class="quick-select-grid" id="medicinesGrid"></div>
+                        <label class="input-label">Address</label>
+                        <textarea class="input-field" rows="3" placeholder="Enter complete address"></textarea>
                     </div>
 
-                    <button class="btn btn-outline btn-block mt-3" onclick="toggleCustomMedicine()">
-                        ➕ Add Custom Medicine
-                    </button>
-
-                    <div id="customMedicineForm" class="card mt-3 hidden" style="background: var(--primary-light);">
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Medicine Name</label>
-                                <input type="text" class="input-field" id="customMedicineName" placeholder="Enter medicine name">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Dosage</label>
-                                <input type="text" class="input-field" id="customMedicineDosage" placeholder="e.g., 500mg">
-                            </div>
-                        </div>
-                        <div class="form-grid-3">
-                            <div class="input-group">
-                                <label class="input-label">Frequency</label>
-                                <select class="input-field" id="customMedicineFrequency">
-                                    <option value="">Select</option>
-                                    <option value="OD">OD (Once daily)</option>
-                                    <option value="BD">BD (Twice daily)</option>
-                                    <option value="TDS">TDS (Three times)</option>
-                                    <option value="QID">QID (Four times)</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Duration</label>
-                                <select class="input-field" id="customMedicineDuration">
-                                    <option value="">Select</option>
-                                    <option value="3 days">3 days</option>
-                                    <option value="5 days">5 days</option>
-                                    <option value="7 days">7 days</option>
-                                    <option value="10 days">10 days</option>
-                                    <option value="15 days">15 days</option>
-                                    <option value="30 days">30 days</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Instructions</label>
-                                <select class="input-field" id="customMedicineInstructions">
-                                    <option value="">Select</option>
-                                    <option value="Before food">Before food</option>
-                                    <option value="After food">After food</option>
-                                    <option value="With food">With food</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary btn-block mt-3" onclick="addCustomMedicine()">✅ Add Medicine</button>
-                    </div>
-
-                    <div id="selectedMedicinesList" class="mt-4"></div>
-
-                    <div class="flex gap-3 mt-4 hidden" id="prescriptionActions">
-                        <button class="btn btn-success btn-block btn-lg" onclick="generatePrescription()">
-                            📄 Generate PDF
-                        </button>
-                        <button class="btn btn-primary btn-lg" onclick="generatePrescription()">
-                            📱 Send WhatsApp
-                        </button>
-                        <button class="btn btn-info btn-lg" onclick="generatePrescription()">
-                            📧 Email
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Billing View -->
-            <div id="billingView" class="hidden">
-                <div class="card">
-                    <h2 class="card-header">💰 Billing & Payment</h2>
-
-                    <form onsubmit="saveBilling(event)">
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Consultation Fee (₹)</label>
-                                <input type="number" class="input-field" id="consultationFee" value="500" min="0" step="0.01" oninput="calculateTotal()">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Procedure Charges (₹)</label>
-                                <input type="number" class="input-field" id="procedureCharges" value="0" min="0" step="0.01" oninput="calculateTotal()">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Medicine Charges (₹)</label>
-                                <input type="number" class="input-field" id="medicineCharges" value="0" min="0" step="0.01" oninput="calculateTotal()">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Lab Test Charges (₹)</label>
-                                <input type="number" class="input-field" id="labCharges" value="0" min="0" step="0.01" oninput="calculateTotal()">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label class="input-label">Discount (%)</label>
-                                <input type="number" class="input-field" id="discount" value="0" min="0" max="100" step="0.01" oninput="calculateTotal()">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Tax/GST (%)</label>
-                                <input type="number" class="input-field" id="tax" value="0" min="0" max="100" step="0.01" oninput="calculateTotal()">
-                            </div>
-                        </div>
-
-                        <div class="card mt-3 billing-total">
-                            <div class="flex-between">
-                                <h3 style="font-size: 22px; font-weight: 700;">Total Amount</h3>
-                                <p style="font-size: 40px; font-weight: 700;" id="totalAmount">₹500.00</p>
-                            </div>
-                        </div>
-
-                        <div class="form-grid mt-3">
-                            <div class="input-group">
-                                <label class="input-label">Payment Mode</label>
-                                <select class="input-field" id="paymentMode">
-                                    <option value="Cash">💵 Cash</option>
-                                    <option value="Card">💳 Card</option>
-                                    <option value="UPI">📱 UPI</option>
-                                    <option value="Net Banking">🏦 Net Banking</option>
-                                    <option value="Insurance">🏥 Insurance</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Payment Status</label>
-                                <select class="input-field" id="paymentStatus">
-                                    <option value="Paid">✅ Paid</option>
-                                    <option value="Pending">⏳ Pending</option>
-                                    <option value="Partial">⚠️ Partial</option>
-                                </select>
-                            </div>
-                        </div>
-
+                    <div class="form-grid">
                         <div class="input-group">
-                            <label class="input-label">Invoice Notes</label>
-                            <textarea class="input-field" id="invoiceNotes" rows="2" placeholder="Additional notes for invoice..."></textarea>
+                            <label class="input-label">Blood Group</label>
+                            <select class="input-field">
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                            </select>
                         </div>
-
-                        <div class="flex gap-3 mt-4">
-                            <button type="submit" class="btn btn-success btn-block btn-lg">✅ Record Payment</button>
-                            <button type="button" class="btn btn-primary btn-lg" onclick="printReceipt()">🖨️ Print Receipt</button>
-                            <button type="button" class="btn btn-info btn-lg" onclick="emailInvoice()">📧 Email Invoice</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Appointments View -->
-            <div id="appointmentsView" class="hidden">
-                <div class="card">
-                    <div class="flex-between mb-4">
-                        <h2 class="card-header" style="margin: 0; padding: 0; border: none;">📅 Appointment Management</h2>
-                        <button class="btn btn-primary" onclick="showNewAppointmentForm()">➕ New Appointment</button>
-                    </div>
-
-                    <div id="newAppointmentForm" class="card hidden" style="background: var(--primary-light); margin-bottom: 24px;">
-                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Schedule New Appointment</h3>
-                        <form onsubmit="scheduleAppointment(event)">
-                            <div class="form-grid">
-                                <div class="input-group">
-                                    <label class="input-label">Patient</label>
-                                    <select class="input-field" id="appointmentPatient" required>
-                                        <option value="">Select Patient</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label class="input-label">Appointment Type</label>
-                                    <select class="input-field" id="appointmentType" required>
-                                        <option value="Consultation">Consultation</option>
-                                        <option value="Follow-up">Follow-up</option>
-                                        <option value="Procedure">Procedure</option>
-                                        <option value="Lab Test">Lab Test</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="input-group">
-                                    <label class="input-label">Date</label>
-                                    <input type="date" class="input-field" id="appointmentDate" required>
-                                </div>
-                                <div class="input-group">
-                                    <label class="input-label">Time</label>
-                                    <input type="time" class="input-field" id="appointmentTime" required>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">Notes</label>
-                                <textarea class="input-field" id="appointmentNotes" rows="2" placeholder="Appointment notes..."></textarea>
-                            </div>
-                            <div class="flex gap-3">
-                                <button type="submit" class="btn btn-primary btn-block">✅ Schedule</button>
-                                <button type="button" class="btn btn-outline" onclick="hideNewAppointmentForm()">❌ Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchAppointmentTab('today')">Today</button>
-                        <button class="tab" onclick="switchAppointmentTab('upcoming')">Upcoming</button>
-                        <button class="tab" onclick="switchAppointmentTab('past')">Past</button>
-                    </div>
-
-                    <div id="todayAppointmentsTab" class="tab-content active">
-                        <div id="todayAppointmentsList"></div>
-                    </div>
-
-                    <div id="upcomingAppointmentsTab" class="tab-content">
-                        <div id="upcomingAppointmentsList"></div>
-                    </div>
-
-                    <div id="pastAppointmentsTab" class="tab-content">
-                        <div id="pastAppointmentsList"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Inventory View -->
-            <div id="inventoryView" class="hidden">
-                <div class="card">
-                    <div class="flex-between mb-4">
-                        <h2 class="card-header" style="margin: 0; padding: 0; border: none;">📦 Inventory Management</h2>
-                        <button class="btn btn-primary" onclick="showAddStockForm()">➕ Add Stock</button>
-                    </div>
-
-                    <div class="stats-grid mb-4">
-                        <div class="stats-card success">
-                            <h3>Total Items</h3>
-                            <p>156</p>
-                        </div>
-                        <div class="stats-card warning">
-                            <h3>Low Stock</h3>
-                            <p>8</p>
-                        </div>
-                        <div class="stats-card danger">
-                            <h3>Out of Stock</h3>
-                            <p>3</p>
-                        </div>
-                        <div class="stats-card info">
-                            <h3>Expiring Soon</h3>
-                            <p>5</p>
-                        </div>
-                    </div>
-
-                    <div class="card" style="background: var(--primary-light);">
-                        <div class="input-group" style="margin: 0;">
-                            <input type="text" class="input-field" placeholder="🔍 Search medicines, supplies..." oninput="searchInventory(this.value)">
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Medicine Name</th>
-                                    <th>Category</th>
-                                    <th>Stock</th>
-                                    <th>Expiry Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="inventoryTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reports View -->
-            <div id="reportsView" class="hidden">
-                <div class="card">
-                    <h2 class="card-header">📊 Analytics & Reports</h2>
-
-                    <div class="stats-grid mb-4">
-                        <div class="stats-card primary">
-                            <h3>This Month</h3>
-                            <p>245 Patients</p>
-                        </div>
-                        <div class="stats-card success">
-                            <h3>Revenue</h3>
-                            <p>₹1,23,500</p>
-                        </div>
-                        <div class="stats-card info">
-                            <h3>Avg. Per Patient</h3>
-                            <p>₹504</p>
-                        </div>
-                        <div class="stats-card warning">
-                            <h3>Pending Payments</h3>
-                            <p>₹8,500</p>
-                        </div>
-                    </div>
-
-                    <div class="form-grid mb-4">
-                        <div class="card">
-                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">📈 Patient Growth</h3>
-                            <div style="padding: 60px; text-align: center; background: var(--bg-color); border-radius: var(--border-radius-sm);">
-                                <p style="color: var(--text-secondary);">Jan: 45 | Feb: 52 | Mar: 61 | Apr: 58 | May: 67 | Jun: 72</p>
-                                <p style="color: var(--success-color); font-weight: 600; margin-top: 12px;">↗️ 60% growth this year</p>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">💰 Revenue Trend</h3>
-                            <div style="padding: 60px; text-align: center; background: var(--bg-color); border-radius: var(--border-radius-sm);">
-                                <p style="color: var(--text-secondary);">Jan: ₹22K | Feb: ₹26K | Mar: ₹31K | Apr: ₹29K | May: ₹34K | Jun: ₹36K</p>
-                                <p style="color: var(--success-color); font-weight: 600; margin-top: 12px;">↗️ 64% revenue growth</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">🏆 Top Diagnoses</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Diagnosis</th>
-                                    <th>Count</th>
-                                    <th>Percentage</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Viral Fever</td>
-                                    <td>45</td>
-                                    <td><span class="badge badge-primary">18.4%</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Hypertension</td>
-                                    <td>38</td>
-                                    <td><span class="badge badge-warning">15.5%</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Diabetes</td>
-                                    <td>32</td>
-                                    <td><span class="badge badge-danger">13.1%</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Respiratory Infection</td>
-                                    <td>28</td>
-                                    <td><span class="badge badge-info">11.4%</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="flex gap-3 mt-4">
-                        <button class="btn btn-primary btn-block">📥 Export Monthly Report</button>
-                        <button class="btn btn-success btn-block">📊 Generate Custom Report</button>
-                        <button class="btn btn-info btn-block">📧 Email Reports</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lab Orders View -->
-            <div id="labOrdersView" class="hidden">
-                <div class="card">
-                    <h2 class="card-header">🧪 Lab Test Orders</h2>
-                    <form onsubmit="orderLabTests(event)">
                         <div class="input-group">
-                            <label class="input-label">Select Tests</label>
-                            <div class="quick-select-grid">
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('CBC')">CBC</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('Blood Sugar')">Blood Sugar</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('Lipid Profile')">Lipid Profile</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('Liver Function')">Liver Function</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('Kidney Function')">Kidney Function</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('Thyroid Profile')">Thyroid Profile</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('Urine Routine')">Urine Routine</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('HbA1c')">HbA1c</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleLabTest('Vitamin D')">Vitamin D</button>
-                            </div>
+                            <label class="input-label">Emergency Contact</label>
+                            <input type="tel" class="input-field" placeholder="+91 98765 43210">
                         </div>
+                    </div>
 
-                        <div class="input-group">
-                            <label class="input-label">Special Instructions</label>
-                            <textarea class="input-field" id="labInstructions" rows="2" placeholder="Fasting required, specific timing, etc..."></textarea>
-                        </div>
-
-                        <div class="flex gap-3 mt-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg">✅ Order Tests</button>
-                            <button type="button" class="btn btn-outline btn-lg" onclick="showView('patientDetails')">❌ Cancel</button>
-                        </div>
-                    </form>
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Patient</button>
+                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Imaging View -->
-            <div id="imagingView" class="hidden">
+            <!-- Patient Details Section -->
+            <div id="patientDetails" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);" id="patientName">👤 Patient Details</h2>
+
                 <div class="card">
-                    <h2 class="card-header">📷 Imaging Orders</h2>
-                    <form onsubmit="orderImaging(event)">
-                        <div class="input-group">
-                            <label class="input-label">Select Imaging</label>
-                            <div class="quick-select-grid">
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('X-Ray Chest')">X-Ray Chest</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('X-Ray Abdomen')">X-Ray Abdomen</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('Ultrasound')">Ultrasound</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('CT Scan')">CT Scan</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('MRI')">MRI</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('ECG')">ECG</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('Echo')">Echo</button>
-                                <button type="button" class="quick-select-btn" onclick="toggleImaging('Mammography')">Mammography</button>
-                            </div>
+                    <div class="card-header">📋 Patient Information</div>
+                    <div class="form-grid">
+                        <div>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Patient ID</p>
+                            <p style="font-size: 18px; font-weight: 600;">P001</p>
                         </div>
+                        <div>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Age / Gender</p>
+                            <p style="font-size: 18px; font-weight: 600;">45 Years / Male</p>
+                        </div>
+                        <div>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Blood Group</p>
+                            <p style="font-size: 18px; font-weight: 600;">O+</p>
+                        </div>
+                        <div>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Phone</p>
+                            <p style="font-size: 18px; font-weight: 600;">+91 98765 43210</p>
+                        </div>
+                    </div>
 
-                        <div class="input-group">
-                            <label class="input-label">Clinical Indication</label>
-                            <textarea class="input-field" id="imagingIndication" rows="3" placeholder="Reason for imaging, clinical details..." required></textarea>
-                        </div>
-
-                        <div class="flex gap-3 mt-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-lg">✅ Order Imaging</button>
-                            <button type="button" class="btn btn-outline btn-lg" onclick="showView('patientDetails')">❌ Cancel</button>
-                        </div>
-                    </form>
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 120px;">🩺 New Visit</button>
+                        <button class="btn btn-info" style="flex: 1; min-width: 120px;">💊 Prescribe</button>
+                        <button class="btn btn-warning" style="flex: 1; min-width: 120px;">💰 Bill</button>
+                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 120px;">⬅️ Back</button>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <!-- New Visit Section -->
+            <div id="newVisit" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">🩺 New Visit</h2>
+
+                <div class="card">
+                    <div class="card-header">📝 Visit Details</div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Chief Complaint *</label>
+                        <textarea class="input-field" rows="3" placeholder="Enter patient's main complaint"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">History of Present Illness</label>
+                        <textarea class="input-field" rows="4" placeholder="Detailed history of current illness"></textarea>
+                    </div>
+
+                    <div class="form-grid-4">
+                        <div class="input-group">
+                            <label class="input-label">BP (mmHg)</label>
+                            <input type="text" class="input-field" placeholder="120/80">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Pulse (bpm)</label>
+                            <input type="number" class="input-field" placeholder="72">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Temp (°F)</label>
+                            <input type="number" class="input-field" placeholder="98.6">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Weight (kg)</label>
+                            <input type="number" class="input-field" placeholder="70">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Examination Findings</label>
+                        <textarea class="input-field" rows="4" placeholder="Physical examination findings"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Diagnosis</label>
+                        <textarea class="input-field" rows="3" placeholder="Enter diagnosis"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Visit</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">💊 Add Prescription</button>
+                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Prescription Section -->
+            <div id="newPrescription" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">💊 New Prescription</h2>
+
+                <div class="card">
+                    <div class="card-header">💊 Medication Details</div>
+                    
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Medicine Name *</label>
+                            <input type="text" class="input-field" placeholder="Enter medicine name">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Dosage *</label>
+                            <input type="text" class="input-field" placeholder="e.g., 500mg">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Frequency *</label>
+                            <select class="input-field">
+                                <option>Once daily</option>
+                                <option>Twice daily</option>
+                                <option>Three times daily</option>
+                                <option>Four times daily</option>
+                                <option>As needed</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Duration *</label>
+                            <input type="text" class="input-field" placeholder="e.g., 7 days">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Instructions</label>
+                        <textarea class="input-field" rows="2" placeholder="Special instructions for the patient"></textarea>
+                    </div>
+
+                    <button class="btn btn-info btn-block">➕ Add Medicine</button>
+
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Prescription</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">🖨️ Print</button>
+                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing Section -->
+            <div id="billing" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">💰 Billing</h2>
+
+                <div class="card">
+                    <div class="card-header">🧾 Bill Details</div>
+                    
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Service/Item *</label>
+                            <input type="text" class="input-field" placeholder="Enter service or item">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Amount (₹) *</label>
+                            <input type="number" class="input-field" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-info btn-block">➕ Add Item</button>
+
+                    <div style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); background: var(--bg-color); border-radius: var(--border-radius-sm);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
+                            <span style="font-weight: 600;">Subtotal:</span>
+                            <span style="font-weight: 600;">₹ 0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
+                            <span style="font-weight: 600;">Tax (18%):</span>
+                            <span style="font-weight: 600;">₹ 0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-top: var(--spacing-sm); border-top: 2px solid var(--border-color);">
+                            <span style="font-size: 20px; font-weight: 700;">Total:</span>
+                            <span style="font-size: 20px; font-weight: 700; color: var(--primary-color);">₹ 0.00</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Bill</button>
+                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">🖨️ Print</button>
+                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">❌ Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">📊 Reports</h2>
+
+                <div class="card">
+                    <div class="card-header">📈 Generate Reports</div>
+                    
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Report Type *</label>
+                            <select class="input-field">
+                                <option>Daily Summary</option>
+                                <option>Weekly Summary</option>
+                                <option>Monthly Summary</option>
+                                <option>Patient List</option>
+                                <option>Revenue Report</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Date Range *</label>
+                            <input type="date" class="input-field">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                        <button class="btn btn-primary" style="flex: 1; min-width: 150px;">📊 Generate</button>
+                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">📥 Export</button>
+                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">⬅️ Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="hidden">
+                <h2 style="font-size: 28px; margin-bottom: var(--spacing-xl); color: var(--text-primary);">⚙️ Settings</h2>
+
+                <div class="card">
+                    <div class="card-header">🏥 Clinic Information</div>
+                    
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Clinic Name *</label>
+                            <input type="text" class="input-field" placeholder="Enter clinic name">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Doctor Name *</label>
+                            <input type="text" class="input-field" placeholder="Dr. Name">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Specialization</label>
+                            <input type="text" class="input-field" placeholder="e.g., Internal Medicine">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Phone Number *</label>
+                            <input type="tel" class="input-field" placeholder="+91 98765 43210">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Clinic Address</label>
+                        <textarea class="input-field" rows="3" placeholder="Enter complete clinic address"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-xl); flex-wrap: wrap;">
+                        <button class="btn btn-success" style="flex: 1; min-width: 150px;">💾 Save Settings</button>
+                        <button class="btn btn-outline" onclick="showSection('dashboard')" style="flex: 1; min-width: 150px;">⬅️ Back</button>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
-        // Sample Data Storage
-        let patients = [
-            { id: 1, code: 'P000001', name: 'Ramesh Kumar', age: 45, gender: 'Male', phone: '9876543210', email: 'ramesh@example.com', bloodGroup: 'B+', allergies: 'Penicillin', conditions: 'Hypertension' },
-            { id: 2, code: 'P000002', name: 'Priya Sharma', age: 32, gender: 'Female', phone: '9876543211', email: 'priya@example.com', bloodGroup: 'A+', allergies: 'None', conditions: 'None' },
-            { id: 3, code: 'P000003', name: 'Suresh Patil', age: 58, gender: 'Male', phone: '9876543212', email: 'suresh@example.com', bloodGroup: 'O+', allergies: 'Sulfa drugs', conditions: 'Diabetes, CKD' }
-        ];
+        // Mobile menu toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-        let visits = [];
-        let appointments = [];
-        let inventory = [
-            { id: 1, name: 'Paracetamol 500mg', category: 'Analgesic', stock: 50, expiry: '2025-12-31', status: 'Low Stock' },
-            { id: 2, name: 'Amoxicillin 500mg', category: 'Antibiotic', stock: 120, expiry: '2026-03-15', status: 'In Stock' },
-            { id: 3, name: 'Metformin 500mg', category: 'Antidiabetic', stock: 200, expiry: '2026-06-30', status: 'In Stock' },
-            { id: 4, name: 'Amlodipine 5mg', category: 'Antihypertensive', stock: 0, expiry: '2025-09-20', status: 'Out of Stock' },
-            { id: 5, name: 'Omeprazole 20mg', category: 'Antacid', stock: 85, expiry: '2025-11-10', status: 'In Stock' }
-        ];
+        function toggleSidebar() {
+            hamburgerBtn.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        }
 
-        let currentPatient = null;
-        let currentVisit = null;
-        let selectedComplaints = [];
-        let selectedDiagnoses = [];
-        let selectedMedicines = [];
-        let selectedInvestigations = [];
-        let selectedLabTests = [];
-        let selectedImaging = [];
+        hamburgerBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
 
-        const complaints = ['Fever', 'Cough', 'Breathless', 'Joint pains', 'Abdominal pain', 'General weakness', 'Headache', 'Chest pain', 'Nausea'];
-        const diagnoses = ['Viral fever', 'Diabetes', 'Hypertension', 'CKD', 'URTI', 'Gastritis', 'Arthritis', 'Migraine'];
-        const medicines = [
-            { name: 'Crocin', dosage: '500mg', frequency: 'TDS', duration: '3 days', instructions: 'After food' },
-            { name: 'Voveran', dosage: '50mg', frequency: 'BD', duration: '5 days', instructions: 'After food' },
-            { name: 'Glykind-M', dosage: '500mg', frequency: 'BD', duration: '30 days', instructions: 'Before food' },
-            { name: 'Cap Omez', dosage: '20mg', frequency: 'OD', duration: '7 days', instructions: 'Before food' },
-            { name: 'Becasule', dosage: '1 cap', frequency: 'OD', duration: '30 days', instructions: 'After food' },
-            { name: 'Azithromycin', dosage: '500mg', frequency: 'OD', duration: '5 days', instructions: 'After food' }
-        ];
-
-        window.onload = function() {
-            renderDashboard();
-            renderPatientList();
-            renderComplaintsGrid();
-            renderDiagnosisGrid();
-            renderMedicinesGrid();
-            renderInventoryTable();
-            renderTodayAppointments();
-        };
-
-        function showView(viewName) {
-            const views = ['dashboard', 'registration', 'patientDetails', 'casesheet', 'prescription', 'billing', 'appointments', 'inventory', 'reports', 'labOrders', 'imaging'];
-            views.forEach(view => {
-                const element = document.getElementById(view + 'View');
-                if (element) element.classList.add('hidden');
+        // Section navigation
+        function showSection(sectionId, patientName = '') {
+            // Hide all sections
+            const sections = ['dashboard', 'newPatient', 'patientDetails', 'newVisit', 'newPrescription', 'billing', 'reports', 'settings'];
+            sections.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
             });
-            const targetView = document.getElementById(viewName + 'View');
-            if (targetView) targetView.classList.remove('hidden');
-        }
 
-        function renderDashboard() {
-            document.getElementById('todayPatientsCount').textContent = '8';
-            document.getElementById('appointmentsCount').textContent = '12';
-            document.getElementById('collectionAmount').textContent = '₹4,500';
-            document.getElementById('totalPatientsCount').textContent = patients.length;
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
 
-            const recentList = document.getElementById('recentPatientsList');
-            recentList.innerHTML = patients.map(p => `
-                <li class="patient-list-item" onclick="selectPatient(${p.id})">
-                    <div class="patient-info">
-                        <h3>${p.name}</h3>
-                        <p>${p.age} years • ${p.gender} • ${p.phone}</p>
-                    </div>
-                    <span class="badge badge-primary">${p.code}</span>
-                </li>
-            `).join('');
-
-            // Today's appointments
-            const todayAppts = document.getElementById('todayAppointments');
-            todayAppts.innerHTML = `
-                <div class="appointment-card">
-                    <div class="flex-between">
-                        <div>
-                            <h4 style="font-weight: 600; margin-bottom: 4px;">Ramesh Kumar</h4>
-                            <p style="font-size: 14px; color: var(--text-secondary);">10:00 AM - Follow-up</p>
-                        </div>
-                        <span class="badge badge-success">Confirmed</span>
-                    </div>
-                </div>
-                <div class="appointment-card">
-                    <div class="flex-between">
-                        <div>
-                            <h4 style="font-weight: 600; margin-bottom: 4px;">Priya Sharma</h4>
-                            <p style="font-size: 14px; color: var(--text-secondary);">11:30 AM - Consultation</p>
-                        </div>
-                        <span class="badge badge-warning">Pending</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderPatientList() {
-            const list = document.getElementById('patientList');
-            list.innerHTML = `
-                <ul class="patient-list">
-                    ${patients.slice(0, 5).map(p => `
-                        <li class="patient-list-item" onclick="selectPatient(${p.id})">
-                            <div class="patient-info">
-                                <h3>${p.name}</h3>
-                                <p>${p.age}y • ${p.gender}</p>
-                            </div>
-                        </li>
-                    `).join('')}
-                </ul>
-            `;
-        }
-
-        function searchPatients(query) {
-            if (query.length < 2) {
-                renderPatientList();
-                return;
+            // Update patient name if provided
+            if (patientName && sectionId === 'patientDetails') {
+                document.getElementById('patientName').textContent = `👤 ${patientName}`;
             }
 
-            const filtered = patients.filter(p => 
-                p.name.toLowerCase().includes(query.toLowerCase()) ||
-                p.phone.includes(query) ||
-                p.code.includes(query)
-            );
-
-            const list = document.getElementById('patientList');
-            list.innerHTML = `
-                <ul class="patient-list">
-                    ${filtered.map(p => `
-                        <li class="patient-list-item" onclick="selectPatient(${p.id})">
-                            <div class="patient-info">
-                                <h3>${p.name}</h3>
-                                <p>${p.age}y • ${p.gender} • ${p.phone}</p>
-                            </div>
-                            <span class="badge badge-primary">${p.code}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            `;
-        }
-
-        function selectPatient(patientId) {
-            currentPatient = patients.find(p => p.id === patientId);
-            
-            document.getElementById('currentPatientCard').classList.remove('hidden');
-            document.getElementById('currentPatientInfo').innerHTML = `
-                <p style="font-size: 18px; font-weight: 700;">${currentPatient.name}</p>
-                <p style="font-size: 14px;">${currentPatient.age} years • ${currentPatient.gender}</p>
-                <p style="font-size: 14px;">${currentPatient.phone}</p>
-            `;
-
-            document.getElementById('casesheetPatientInfo').innerHTML = `
-                <div>
-                    <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 4px;">${currentPatient.name}</h2>
-                    <p style="color: var(--text-secondary); font-size: 16px;">${currentPatient.age} years • ${currentPatient.gender} • ${currentPatient.code}</p>
-                </div>
-            `;
-
-            renderPatientDetails();
-            showView('patientDetails');
-        }
-
-        function renderPatientDetails() {
-            document.getElementById('patientDetailsHeader').innerHTML = `
-                <div>
-                    <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">${currentPatient.name}</h2>
-                    <p style="color: var(--text-secondary); font-size: 16px;">${currentPatient.code} • ${currentPatient.age} years • ${currentPatient.gender}</p>
-                </div>
-            `;
-
-            document.getElementById('patientOverviewInfo').innerHTML = `
-                <p style="margin-bottom: 8px;"><strong>Phone:</strong> ${currentPatient.phone}</p>
-                <p style="margin-bottom: 8px;"><strong>Email:</strong> ${currentPatient.email}</p>
-                <p style="margin-bottom: 8px;"><strong>Blood Group:</strong> ${currentPatient.bloodGroup}</p>
-            `;
-
-            document.getElementById('patientAlerts').innerHTML = `
-                <p style="margin-bottom: 8px;"><strong>🚨 Allergies:</strong> ${currentPatient.allergies}</p>
-                <p style="margin-bottom: 8px;"><strong>⚕️ Conditions:</strong> ${currentPatient.conditions}</p>
-            `;
-
-            // Visit timeline
-            document.getElementById('visitTimeline').innerHTML = `
-                <div class="timeline-item">
-                    <div class="timeline-date">Nov 25, 2024 - 10:30 AM</div>
-                    <h4 style="font-weight: 600; margin-bottom: 8px;">Follow-up Visit</h4>
-                    <p style="color: var(--text-secondary); margin-bottom: 8px;"><strong>Complaints:</strong> Fever, Cough</p>
-                    <p style="color: var(--text-secondary); margin-bottom: 8px;"><strong>Diagnosis:</strong> Viral fever</p>
-                    <p style="color: var(--text-secondary);"><strong>Prescription:</strong> Crocin 500mg TDS x 3 days</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Nov 10, 2024 - 2:15 PM</div>
-                    <h4 style="font-weight: 600; margin-bottom: 8px;">Regular Checkup</h4>
-                    <p style="color: var(--text-secondary); margin-bottom: 8px;"><strong>Complaints:</strong> Routine checkup</p>
-                    <p style="color: var(--text-secondary); margin-bottom: 8px;"><strong>Diagnosis:</strong> Hypertension (controlled)</p>
-                    <p style="color: var(--text-secondary);"><strong>Prescription:</strong> Amlodipine 5mg OD x 30 days</p>
-                </div>
-            `;
-
-            // Lab reports
-            document.getElementById('labReportsList').innerHTML = `
-                <div class="medicine-item lab-report-card normal">
-                    <div class="flex-between mb-3">
-                        <h4>Complete Blood Count (CBC)</h4>
-                        <span class="badge badge-success">Normal</span>
-                    </div>
-                    <p><strong>Date:</strong> Nov 20, 2024</p>
-                    <p><strong>Hemoglobin:</strong> 14.2 g/dL (Normal: 13-17)</p>
-                    <p><strong>WBC:</strong> 7,500 /μL (Normal: 4,000-11,000)</p>
-                    <button class="btn btn-primary btn-sm mt-3">📄 View Full Report</button>
-                </div>
-                <div class="medicine-item lab-report-card">
-                    <div class="flex-between mb-3">
-                        <h4>Blood Sugar (Fasting)</h4>
-                        <span class="badge badge-warning">High</span>
-                    </div>
-                    <p><strong>Date:</strong> Nov 15, 2024</p>
-                    <p><strong>Glucose:</strong> 126 mg/dL (Normal: 70-100)</p>
-                    <button class="btn btn-primary btn-sm mt-3">📄 View Full Report</button>
-                </div>
-            `;
-
-            // Prescriptions
-            document.getElementById('prescriptionsList').innerHTML = `
-                <div class="medicine-item">
-                    <div class="flex-between mb-3">
-                        <h4>Prescription - Nov 25, 2024</h4>
-                        <button class="btn btn-primary btn-sm">📄 View PDF</button>
-                    </div>
-                    <p><strong>1.</strong> Crocin 500mg - TDS x 3 days (After food)</p>
-                    <p><strong>2.</strong> Voveran 50mg - BD x 5 days (After food)</p>
-                </div>
-            `;
-
-            // Documents
-            document.getElementById('documentsList').innerHTML = `
-                <div class="medicine-item">
-                    <div class="flex-between">
-                        <div>
-                            <h4>X-Ray Chest PA View</h4>
-                            <p>Uploaded: Nov 20, 2024</p>
-                        </div>
-                        <button class="btn btn-primary btn-sm">👁️ View</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function switchTab(tabName) {
-            const tabs = ['overview', 'visits', 'labs', 'prescriptions', 'documents'];
-            tabs.forEach(tab => {
-                document.getElementById(tab + 'Tab').classList.remove('active');
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            });
-            document.getElementById(tabName + 'Tab').classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        function registerPatient(event) {
-            event.preventDefault();
-
-            const newPatient = {
-                id: patients.length + 1,
-                code: `P${String(patients.length + 1).padStart(6, '0')}`,
-                name: document.getElementById('patientName').value,
-                age: parseInt(document.getElementById('patientAge').value),
-                gender: document.getElementById('patientGender').value,
-                phone: document.getElementById('patientPhone').value,
-                email: document.getElementById('patientEmail').value,
-                bloodGroup: document.getElementById('patientBloodGroup').value,
-                allergies: document.getElementById('patientAllergies').value || 'None',
-                conditions: document.getElementById('patientConditions').value || 'None'
-            };
-
-            patients.push(newPatient);
-            alert('✅ Patient registered successfully!\n\nPatient ID: ' + newPatient.code);
-            
-            selectPatient(newPatient.id);
-            event.target.reset();
-        }
-
-        function renderComplaintsGrid() {
-            const grid = document.getElementById('complaintsGrid');
-            grid.innerHTML = complaints.map(c => `
-                <button type="button" class="quick-select-btn" onclick="toggleComplaint('${c}')">
-                    ${c}
-                </button>
-            `).join('');
-        }
-
-        function toggleComplaint(complaint) {
-            const index = selectedComplaints.indexOf(complaint);
-            if (index > -1) {
-                selectedComplaints.splice(index, 1);
-            } else {
-                selectedComplaints.push(complaint);
+            // Close mobile sidebar
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                hamburgerBtn.classList.remove('active');
             }
-            updateComplaintsUI();
+
+            // Scroll to top
+            document.getElementById('mainContent').scrollTop = 0;
         }
 
-        function updateComplaintsUI() {
-            complaints.forEach(c => {
-                const btn = Array.from(document.querySelectorAll('#complaintsGrid button')).find(b => b.textContent.trim() === c);
-                if (btn) {
-                    if (selectedComplaints.includes(c)) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const patientItems = document.querySelectorAll('.patient-list-item');
+            
+            patientItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
                 }
             });
-        }
+        });
 
-        function renderDiagnosisGrid() {
-            const grid = document.getElementById('diagnosisGrid');
-            grid.innerHTML = diagnoses.map(d => `
-                <button type="button" class="quick-select-btn" onclick="toggleDiagnosis('${d}')">
-                    ${d}
-                </button>
-            `).join('');
-        }
-
-        function toggleDiagnosis(diagnosis) {
-            const index = selectedDiagnoses.indexOf(diagnosis);
-            if (index > -1) {
-                selectedDiagnoses.splice(index, 1);
-            } else {
-                selectedDiagnoses.push(diagnosis);
-            }
-            updateDiagnosisUI();
-        }
-
-        function updateDiagnosisUI() {
-            diagnoses.forEach(d => {
-                const btn = Array.from(document.querySelectorAll('#diagnosisGrid button')).find(b => b.textContent.trim() === d);
-                if (btn) {
-                    if (selectedDiagnoses.includes(d)) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                }
-            });
-        }
-
-        function toggleInvestigation(investigation) {
-            const index = selectedInvestigations.indexOf(investigation);
-            if (index > -1) {
-                selectedInvestigations.splice(index, 1);
-            } else {
-                selectedInvestigations.push(investigation);
-            }
-        }
-
-        function saveCaseSheet(event) {
-            event.preventDefault();
-
-            if (selectedComplaints.length === 0 || selectedDiagnoses.length === 0) {
-                alert('⚠️ Please select at least one complaint and diagnosis');
-                return;
-            }
-
-            currentVisit = {
-                id: visits.length + 1,
-                patientId: currentPatient.id,
-                date: new Date(),
-                complaints: [...selectedComplaints],
-                vitals: {
-                    bp: document.getElementById('vitalBP').value,
-                    temp: document.getElementById('vitalTemp').value,
-                    pulse: document.getElementById('vitalPulse').value,
-                    spo2: document.getElementById('vitalSpO2').value,
-                    weight: document.getElementById('vitalWeight').value,
-                    height: document.getElementById('vitalHeight').value
-                },
-                history: document.getElementById('history').value,
-                pastHistory: document.getElementById('pastHistory').value,
-                examination: document.getElementById('examination').value,
-                diagnosis: [...selectedDiagnoses],
-                investigations: [...selectedInvestigations],
-                notes: document.getElementById('notes').value,
-                followupDate: document.getElementById('followupDate').value,
-                followupTime: document.getElementById('followupTime').value
-            };
-
-            visits.push(currentVisit);
-            alert('✅ Case sheet saved successfully!');
-            showView('prescription');
-        }
-
-        function renderMedicinesGrid() {
-            const grid = document.getElementById('medicinesGrid');
-            grid.innerHTML = medicines.map((m, i) => `
-                <button type="button" class="quick-select-btn" onclick="addMedicine(${i})" style="text-align: left; flex-direction: column; align-items: flex-start; justify-content: center;">
-                    <div style="font-weight: 700; margin-bottom: 4px;">${m.name}</div>
-                    <div style="font-size: 13px; color: var(--text-secondary);">${m.dosage} • ${m.frequency}</div>
-                </button>
-            `).join('');
-        }
-
-        function addMedicine(index) {
-            selectedMedicines.push({...medicines[index]});
-            renderSelectedMedicines();
-        }
-
-        function toggleCustomMedicine() {
-            const form = document.getElementById('customMedicineForm');
-            form.classList.toggle('hidden');
-        }
-
-        function addCustomMedicine() {
-            const name = document.getElementById('customMedicineName').value;
-            const dosage = document.getElementById('customMedicineDosage').value;
-            const frequency = document.getElementById('customMedicineFrequency').value;
-            const duration = document.getElementById('customMedicineDuration').value;
-            const instructions = document.getElementById('customMedicineInstructions').value;
-
-            if (!name || !dosage) {
-                alert('⚠️ Please enter medicine name and dosage');
-                return;
-            }
-
-            selectedMedicines.push({ name, dosage, frequency, duration, instructions });
-            renderSelectedMedicines();
-            
-            document.getElementById('customMedicineName').value = '';
-            document.getElementById('customMedicineDosage').value = '';
-            document.getElementById('customMedicineFrequency').value = '';
-            document.getElementById('customMedicineDuration').value = '';
-            document.getElementById('customMedicineInstructions').value = '';
-            toggleCustomMedicine();
-        }
-
-        function renderSelectedMedicines() {
-            const list = document.getElementById('selectedMedicinesList');
-            
-            if (selectedMedicines.length === 0) {
-                list.innerHTML = '';
-                document.getElementById('prescriptionActions').classList.add('hidden');
-                return;
-            }
-
-            document.getElementById('prescriptionActions').classList.remove('hidden');
-
-            list.innerHTML = `
-                <h3 class="input-label" style="font-size: 18px; margin-bottom: 16px;">
-                    💊 Prescription (${selectedMedicines.length} medicines)
-                </h3>
-                ${selectedMedicines.map((m, i) => `
-                    <div class="medicine-item">
-                        <div class="flex-between mb-3">
-                            <h4>${i + 1}. ${m.name}</h4>
-                            <button class="btn btn-danger btn-sm" onclick="removeMedicine(${i})">
-                                ❌ Remove
-                            </button>
-                        </div>
-                        <p><strong>Dosage:</strong> ${m.dosage} | <strong>Frequency:</strong> ${m.frequency}</p>
-                        <p><strong>Duration:</strong> ${m.duration} | <strong>Instructions:</strong> ${m.instructions}</p>
-                    </div>
-                `).join('')}
-            `;
-        }
-
-        function removeMedicine(index) {
-            selectedMedicines.splice(index, 1);
-            renderSelectedMedicines();
-        }
-
-        function generatePrescription() {
-            if (selectedMedicines.length === 0) {
-                alert('⚠️ Please add at least one medicine');
-                return;
-            }
-
-            alert('✅ Prescription generated successfully!\n\n📄 PDF generated\n📱 WhatsApp message sent\n📧 Email sent');
-            showView('billing');
-        }
-
-        function calculateTotal() {
-            const consultation = parseFloat(document.getElementById('consultationFee').value) || 0;
-            const procedure = parseFloat(document.getElementById('procedureCharges').value) || 0;
-            const medicine = parseFloat(document.getElementById('medicineCharges').value) || 0;
-            const lab = parseFloat(document.getElementById('labCharges').value) || 0;
-            const discount = parseFloat(document.getElementById('discount').value) || 0;
-            const tax = parseFloat(document.getElementById('tax').value) || 0;
-            
-            const subtotal = consultation + procedure + medicine + lab;
-            const discountAmount = (subtotal * discount) / 100;
-            const afterDiscount = subtotal - discountAmount;
-            const taxAmount = (afterDiscount * tax) / 100;
-            const total = afterDiscount + taxAmount;
-            
-            document.getElementById('totalAmount').textContent = `₹${total.toFixed(2)}`;
-        }
-
-        function saveBilling(event) {
-            event.preventDefault();
-            alert('✅ Payment recorded successfully!\n\n🎉 Visit completed!\n📧 Invoice emailed to patient');
-            
-            currentPatient = null;
-            currentVisit = null;
-            selectedComplaints = [];
-            selectedDiagnoses = [];
-            selectedMedicines = [];
-            selectedInvestigations = [];
-            
-            showView('dashboard');
-            renderDashboard();
-        }
-
-        function printReceipt() {
-            alert('🖨️ Printing receipt...\n\nPDF receipt will be generated.');
-        }
-
-        function emailInvoice() {
-            alert('📧 Emailing invoice...\n\nInvoice sent to patient email.');
-        }
-
-        function renderInventoryTable() {
-            const tbody = document.getElementById('inventoryTableBody');
-            tbody.innerHTML = inventory.map(item => `
-                <tr>
-                    <td><strong>${item.name}</strong></td>
-                    <td>${item.category}</td>
-                    <td>${item.stock}</td>
-                    <td>${item.expiry}</td>
-                    <td>
-                        ${item.status === 'In Stock' ? '<span class="badge badge-success">In Stock</span>' : ''}
-                        ${item.status === 'Low Stock' ? '<span class="badge badge-warning">Low Stock</span>' : ''}
-                        ${item.status === 'Out of Stock' ? '<span class="badge badge-danger">Out of Stock</span>' : ''}
-                    </td>
-                    <td>
-                        <button class="btn btn-primary btn-sm">✏️ Edit</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function searchInventory(query) {
-            // Implement inventory search
-        }
-
-        function showAddStockForm() {
-            alert('📦 Add Stock form will open here');
-        }
-
-        function renderTodayAppointments() {
-            const list = document.getElementById('todayAppointmentsList');
-            list.innerHTML = `
-                <div class="appointment-card">
-                    <div class="flex-between mb-3">
-                        <div>
-                            <h4 style="font-weight: 600; margin-bottom: 4px;">Ramesh Kumar</h4>
-                            <p style="font-size: 14px; color: var(--text-secondary);">10:00 AM - Follow-up</p>
-                        </div>
-                        <span class="badge badge-success">Confirmed</span>
-                    </div>
-                    <div class="flex gap-3">
-                        <button class="btn btn-primary btn-sm">✅ Check In</button>
-                        <button class="btn btn-warning btn-sm">📞 Call</button>
-                        <button class="btn btn-danger btn-sm">❌ Cancel</button>
-                    </div>
-                </div>
-                <div class="appointment-card">
-                    <div class="flex-between mb-3">
-                        <div>
-                            <h4 style="font-weight: 600; margin-bottom: 4px;">Priya Sharma</h4>
-                            <p style="font-size: 14px; color: var(--text-secondary);">11:30 AM - Consultation</p>
-                        </div>
-                        <span class="badge badge-warning">Pending</span>
-                    </div>
-                    <div class="flex gap-3">
-                        <button class="btn btn-primary btn-sm">✅ Check In</button>
-                        <button class="btn btn-warning btn-sm">📞 Call</button>
-                        <button class="btn btn-danger btn-sm">❌ Cancel</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function showNewAppointmentForm() {
-            document.getElementById('newAppointmentForm').classList.remove('hidden');
-            
-            // Populate patient dropdown
-            const select = document.getElementById('appointmentPatient');
-            select.innerHTML = '<option value="">Select Patient</option>' + 
-                patients.map(p => `<option value="${p.id}">${p.name} (${p.code})</option>`).join('');
-        }
-
-        function hideNewAppointmentForm() {
-            document.getElementById('newAppointmentForm').classList.add('hidden');
-        }
-
-        function scheduleAppointment(event) {
-            event.preventDefault();
-            alert('✅ Appointment scheduled successfully!\n\n📧 Confirmation sent to patient');
-            hideNewAppointmentForm();
-            renderTodayAppointments();
-        }
-
-        function switchAppointmentTab(tabName) {
-            const tabs = ['today', 'upcoming', 'past'];
-            tabs.forEach(tab => {
-                document.getElementById(tab + 'AppointmentsTab').classList.remove('active');
-            });
-            document.getElementById(tabName + 'AppointmentsTab').classList.add('active');
-        }
-
-        function toggleLabTest(test) {
-            const index = selectedLabTests.indexOf(test);
-            if (index > -1) {
-                selectedLabTests.splice(index, 1);
-            } else {
-                selectedLabTests.push(test);
-            }
-        }
-
-        function orderLabTests(event) {
-            event.preventDefault();
-            if (selectedLabTests.length === 0) {
-                alert('⚠️ Please select at least one test');
-                return;
-            }
-            alert('✅ Lab tests ordered successfully!\n\nTests: ' + selectedLabTests.join(', '));
-            selectedLabTests = [];
-            showView('patientDetails');
-        }
-
-        function toggleImaging(imaging) {
-            const index = selectedImaging.indexOf(imaging);
-            if (index > -1) {
-                selectedImaging.splice(index, 1);
-            } else {
-                selectedImaging.push(imaging);
-            }
-        }
-
-        function orderImaging(event) {
-            event.preventDefault();
-            if (selectedImaging.length === 0) {
-                alert('⚠️ Please select at least one imaging test');
-                return;
-            }
-            alert('✅ Imaging ordered successfully!\n\nImaging: ' + selectedImaging.join(', '));
-            selectedImaging = [];
-            showView('patientDetails');
-        }
+        // Initialize - show dashboard
+        showSection('dashboard');
     </script>
 </body>
 </html>
