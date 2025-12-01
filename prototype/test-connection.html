@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supabase Connection Test</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         body {
             font-family: monospace;
@@ -24,7 +24,7 @@
     </style>
 </head>
 <body>
-    <h1>🔍 Supabase Connection Test</h1>
+    <h1>🔍 Supabase Connection Test v2</h1>
     
     <div class="test">
         <h3>Configuration:</h3>
@@ -53,11 +53,17 @@
         document.getElementById('config').innerHTML = `
             <div class="info">URL: ${SUPABASE_URL}</div>
             <div class="info">Key: ${SUPABASE_KEY.substring(0, 50)}...</div>
+            <div class="info">CDN: unpkg.com (changed from jsdelivr)</div>
         `;
         
         async function testConnection() {
             try {
                 document.getElementById('connection').innerHTML = '<div class="info">⏳ Testing connection...</div>';
+                
+                // Check if supabase is loaded
+                if (typeof window.supabase === 'undefined') {
+                    throw new Error('Supabase library not loaded!');
+                }
                 
                 // Test 1: Create client
                 const supabase = window.supabase.createClient(SUPABASE_URL, 'sb_publishable_NzJc47DMr2O-rOB2RhVDkA_cBCCiUBu');
